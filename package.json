@@ -1,0 +1,13 @@
+{
+  "name": "document-lifecycle-manager",
+  "version": "0.1.0",
+  "private": true,
+  "description": "社内ドキュメントの更新・レビュー・履歴を一元管理するフロントエンドMVP",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
