@@ -251,3 +251,40 @@ http://localhost:3000
 ```
 
 現在はバックエンドを持たないモック版です。画面上で作成した更新依頼は、ブラウザを再読み込みするとリセットされます。
+
+## Dockerでの起動
+
+DockerとDocker Compose v2が利用できる環境では、以下で起動できます。
+
+```bash
+docker compose up -d --build
+```
+
+起動後、ブラウザで `http://localhost:3000` を開いてください。
+
+公開ポートを変更する場合：
+
+```bash
+DLM_PORT=8080 docker compose up -d --build
+```
+
+## CI/CD
+
+`.github/workflows/deploy.yml` に、セルフホストランナーを利用した自動デプロイを定義しています。
+
+`main` ブランチへ変更がプッシュされると、以下を自動実行します。
+
+1. Docker環境の確認
+2. コミットSHAをタグにしたアプリケーションイメージのビルド
+3. Docker Composeによるコンテナの差し替え
+4. コンテナのヘルスチェック
+
+### セルフホストランナーの要件
+
+- GitHub Actionsのラベル：`self-hosted`、`linux`
+- Docker Engine
+- Docker Compose v2
+- Dockerを実行できる権限
+- アプリ公開用ポート（既定値：`3000`）
+
+ポートを変更する場合は、GitHubリポジトリの **Settings → Secrets and variables → Actions → Variables** に `DLM_PORT` を登録してください。
