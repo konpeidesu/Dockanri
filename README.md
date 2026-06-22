@@ -281,10 +281,26 @@ DLM_PORT=8080 docker compose up -d --build
 
 ### セルフホストランナーの要件
 
-- GitHub Actionsのラベル：`self-hosted`、`linux`
+- GitHub Actionsのラベル：`self-hosted`
 - Docker Engine
 - Docker Compose v2
 - Dockerを実行できる権限
 - アプリ公開用ポート（既定値：`3000`）
 
 ポートを変更する場合は、GitHubリポジトリの **Settings → Secrets and variables → Actions → Variables** に `DLM_PORT` を登録してください。
+
+### デプロイ先へのアクセス
+
+既定のアクセスURLは以下です。
+
+```text
+http://<セルフホストランナーのIPアドレス>:3000
+```
+
+Linuxランナーでは、次のコマンドでIPアドレスを確認できます。
+
+```bash
+hostname -I
+```
+
+別PCからアクセスする場合は、ランナーのOSやクラウド環境のファイアウォールでTCPポート `3000` を許可してください。

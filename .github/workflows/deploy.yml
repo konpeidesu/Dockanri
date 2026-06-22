@@ -11,16 +11,17 @@ permissions:
 
 concurrency:
   group: dockanri-production
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
     name: Build and deploy container
-    runs-on:
-      - self-hosted
-      - linux
+    runs-on: self-hosted
     timeout-minutes: 15
     environment: production
+    env:
+      DLM_IMAGE: dockanri:${{ github.sha }}
+      DLM_PORT: ${{ vars.DLM_PORT || '3000' }}
 
     steps:
       - name: Check out repository
@@ -32,39 +33,17 @@ jobs:
           docker compose version
 
       - name: Build application image
-        env:
-          IMAGE_NAME: dockanri:${{ github.sha }}
-        run: docker build --pull --tag "$IMAGE_NAME" .
+        run: docker build --pull --tag "${{ env.DLM_IMAGE }}" .
 
       - name: Deploy application
-        env:
-          DLM_IMAGE: dockanri:${{ github.sha }}
-          DLM_PORT: ${{ vars.DLM_PORT || '3000' }}
-        run: docker compose up --detach --no-build --remove-orphans
+        run: docker compose up --detach --no-build --remove-orphans --wait --wait-timeout 90
 
-      - name: Wait for healthy container
-        shell: bash
+      - name: Show deployment status
+        run: docker compose ps
+
+      - name: Verify application endpoint
         run: |
-          for attempt in {1..18}; do
-            status="$(docker inspect --format='{{.State.Health.Status}}' dockanri-app 2>/dev/null || true)"
-            echo "Health status: ${status:-starting} (${attempt}/18)"
-
-            if [ "$status" = "healthy" ]; then
-              docker compose ps
-              exit 0
-            fi
-
-            if [ "$status" = "unhealthy" ]; then
-              docker compose logs --no-color --tail=100
-              exit 1
-            fi
-
-            sleep 5
-          done
-
-          docker compose logs --no-color --tail=100
-          echo "Container did not become healthy in time."
-          exit 1
+          node -e "fetch('http://127.0.0.1:${{ env.DLM_PORT }}').then(async (response) => { if (!response.ok) throw new Error('HTTP ' + response.status); const body = await response.text(); if (!body.includes('Document Lifecycle Manager')) throw new Error('Unexpected response'); console.log('Application endpoint is ready: HTTP ' + response.status) }).catch((error) => { console.error(error); process.exit(1) })"
 
       - name: Show logs on failure
         if: failure()
