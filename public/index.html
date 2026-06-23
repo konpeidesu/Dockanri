@@ -42,7 +42,8 @@
 
         <div class="sidebar-section">
           <p>管理</p>
-          <button class="nav-item muted" data-page="members"><span class="nav-icon">♙</span><span>メンバー</span></button>
+          <button class="nav-item muted" data-page="members"><span class="nav-icon">♙</span><span>ユーザー管理</span></button>
+          <button class="nav-item muted" data-page="modules"><span class="nav-icon">◇</span><span>モジュール管理</span></button>
           <button class="nav-item muted" data-page="settings"><span class="nav-icon">⚙</span><span>設定</span></button>
         </div>
 
@@ -114,6 +115,44 @@
           <div class="modal-actions">
             <button type="button" class="secondary-button" id="cancelModal">キャンセル</button>
             <button type="submit" class="primary-button">更新依頼を作成</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <input class="hidden" id="memberCsvInput" type="file" accept=".csv,text/csv" />
+    <input class="hidden" id="documentCsvInput" type="file" accept=".csv,text/csv" />
+
+    <div class="detail-backdrop hidden" id="detailBackdrop"></div>
+    <aside class="detail-panel" id="detailPanel" aria-label="ドキュメント詳細"></aside>
+
+    <div class="modal-backdrop hidden" id="moduleModal">
+      <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="moduleModalTitle">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">MODULE MASTER</p>
+            <h2 id="moduleModalTitle">モジュールを追加</h2>
+          </div>
+          <button class="modal-close" id="closeModuleModal" aria-label="閉じる">×</button>
+        </div>
+        <form id="moduleForm">
+          <input id="moduleEditId" type="hidden" />
+          <label>モジュール名
+            <input id="moduleName" required maxlength="100" />
+          </label>
+          <label>説明
+            <textarea id="moduleDescription" rows="3" placeholder="対象製品や管理範囲"></textarea>
+          </label>
+          <label>オーナー
+            <select id="moduleOwner" required></select>
+          </label>
+          <label class="checkbox-label">
+            <input id="moduleActive" type="checkbox" checked />
+            有効なモジュールとして登録
+          </label>
+          <div class="modal-actions">
+            <button type="button" class="secondary-button" id="cancelModuleModal">キャンセル</button>
+            <button type="submit" class="primary-button">保存</button>
           </div>
         </form>
       </section>

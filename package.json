@@ -5,7 +5,13 @@
   "description": "社内ドキュメントの更新・レビュー・履歴を一元管理するフロントエンドMVP",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "prisma:validate": "prisma validate",
+    "prisma:format": "prisma format",
+    "prisma:generate": "prisma generate"
+  },
+  "devDependencies": {
+    "prisma": "7.8.0"
   },
   "engines": {
     "node": ">=18"

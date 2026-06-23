@@ -1,0 +1,219 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// アプリを利用するメンバー。担当、レビュー、承認などの責任主体になる。
+model Member {
+  id          String     @id @default(uuid()) @db.Uuid
+  email       String     @unique @db.VarChar(255)
+  displayName String     @map("display_name") @db.VarChar(100)
+  role        MemberRole
+  department  String?    @db.VarChar(100)
+  isActive    Boolean    @default(true) @map("is_active")
+  createdAt   DateTime   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  createdDocuments       Document[]      @relation("DocumentCreator")
+  ownedDocuments         Document[]      @relation("DocumentOwner")
+  managedDocuments       Document[]      @relation("DocumentManager")
+  requestedUpdates       UpdateRequest[] @relation("UpdateRequester")
+  assignedUpdates        UpdateRequest[] @relation("UpdateAssignee")
+  reviewAssignments      UpdateRequest[] @relation("UpdateReviewer")
+  approvalAssignments    UpdateRequest[] @relation("UpdateApprover")
+  comments               Comment[]
+  activityLogs           ActivityLog[]
+
+  @@index([role, isActive])
+  @@map("members")
+}
+
+/// ファイル本体は保持せず、BoxおよびサポートサイトへのURLだけを管理する資料台帳。
+model Document {
+  id                 String         @id @default(uuid()) @db.Uuid
+  documentCode       String         @unique @map("document_code") @db.VarChar(30)
+  name               String         @db.VarChar(255)
+  module             String         @db.VarChar(100)
+  category           DocumentCategory
+  boxUrl             String?        @map("box_url") @db.Text
+  supportSiteUrl     String?        @map("support_site_url") @db.Text
+  managementRole     MemberRole     @map("management_role")
+  updatePurpose      String?        @map("update_purpose") @db.Text
+  notes              String?        @db.Text
+  lifecycleStatus    DocumentStatus @default(ACTIVE) @map("lifecycle_status")
+  currentVersion     String?        @map("current_version") @db.VarChar(50)
+  lastPublishedAt    DateTime?      @map("last_published_at") @db.Timestamptz(3)
+  nextReviewAt       DateTime?      @map("next_review_at") @db.Timestamptz(3)
+  createdById        String         @map("created_by_id") @db.Uuid
+  ownerId            String         @map("owner_id") @db.Uuid
+  managerId          String?        @map("manager_id") @db.Uuid
+  createdAt          DateTime       @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime       @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  createdBy      Member          @relation("DocumentCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  owner          Member          @relation("DocumentOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  manager        Member?         @relation("DocumentManager", fields: [managerId], references: [id], onDelete: SetNull)
+  updateRequests UpdateRequest[]
+  comments       Comment[]
+  activityLogs   ActivityLog[]
+
+  @@index([module, category])
+  @@index([ownerId, lifecycleStatus])
+  @@index([nextReviewAt])
+  @@map("documents")
+}
+
+/// GitHub Issueに相当する更新作業。レビュー依頼から承認・正式版反映までを管理する。
+model UpdateRequest {
+  id                String              @id @default(uuid()) @db.Uuid
+  requestNumber     Int                 @unique @default(autoincrement()) @map("request_number")
+  documentId        String              @map("document_id") @db.Uuid
+  title             String              @db.VarChar(255)
+  reason            String              @db.Text
+  changeSummary     String?             @map("change_summary") @db.Text
+  priority          UpdatePriority      @default(MEDIUM)
+  status            UpdateRequestStatus @default(NOT_STARTED)
+  dueAt             DateTime?           @map("due_at") @db.Timestamptz(3)
+  requestedById     String              @map("requested_by_id") @db.Uuid
+  assigneeId        String?             @map("assignee_id") @db.Uuid
+  reviewerId        String?             @map("reviewer_id") @db.Uuid
+  approverId        String?             @map("approver_id") @db.Uuid
+  startedAt         DateTime?           @map("started_at") @db.Timestamptz(3)
+  reviewRequestedAt DateTime?           @map("review_requested_at") @db.Timestamptz(3)
+  approvedAt        DateTime?           @map("approved_at") @db.Timestamptz(3)
+  completedAt       DateTime?           @map("completed_at") @db.Timestamptz(3)
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime            @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  document   Document      @relation(fields: [documentId], references: [id], onDelete: Restrict)
+  requestedBy Member       @relation("UpdateRequester", fields: [requestedById], references: [id], onDelete: Restrict)
+  assignee    Member?      @relation("UpdateAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reviewer    Member?      @relation("UpdateReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  approver    Member?      @relation("UpdateApprover", fields: [approverId], references: [id], onDelete: SetNull)
+  comments    Comment[]
+  activityLogs ActivityLog[]
+
+  @@index([documentId, status])
+  @@index([assigneeId, status])
+  @@index([reviewerId, status])
+  @@index([dueAt, status])
+  @@map("update_requests")
+}
+
+/// ドキュメント単位の議論。updateRequestIdがある場合は特定の更新依頼に対するコメント。
+model Comment {
+  id              String   @id @default(uuid()) @db.Uuid
+  documentId      String   @map("document_id") @db.Uuid
+  updateRequestId String?  @map("update_request_id") @db.Uuid
+  authorId        String   @map("author_id") @db.Uuid
+  body            String   @db.Text
+  isEdited        Boolean  @default(false) @map("is_edited")
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  document      Document       @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  updateRequest UpdateRequest? @relation(fields: [updateRequestId], references: [id], onDelete: Cascade)
+  author        Member         @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([documentId, createdAt])
+  @@index([updateRequestId, createdAt])
+  @@map("comments")
+}
+
+/// GitHubのCommit Historyに相当する追記専用の監査ログ。
+model ActivityLog {
+  id              String                  @id @default(uuid()) @db.Uuid
+  documentId      String                  @map("document_id") @db.Uuid
+  updateRequestId String?                 @map("update_request_id") @db.Uuid
+  actorId         String?                 @map("actor_id") @db.Uuid
+  action          ActivityAction
+  summary         String                  @db.VarChar(255)
+  details         Json?
+  fromStatus      UpdateRequestStatus?    @map("from_status")
+  toStatus        UpdateRequestStatus?    @map("to_status")
+  createdAt       DateTime                @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  document      Document       @relation(fields: [documentId], references: [id], onDelete: Restrict)
+  updateRequest UpdateRequest? @relation(fields: [updateRequestId], references: [id], onDelete: SetNull)
+  actor         Member?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([documentId, createdAt])
+  @@index([updateRequestId, createdAt])
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@map("activity_logs")
+}
+
+enum MemberRole {
+  ADMIN
+  SE
+  PE
+  CSM
+  PSM
+  VIEWER
+
+  @@map("member_role")
+}
+
+enum DocumentCategory {
+  PRODUCT_INTRODUCTION
+  PROPOSAL
+  POV_GUIDE
+  INSTALLATION_GUIDE
+  OPERATION_MANUAL
+  FAQ
+  TECHNICAL_MATERIAL
+  OTHER
+
+  @@map("document_category")
+}
+
+enum DocumentStatus {
+  ACTIVE
+  ARCHIVED
+  DEPRECATED
+
+  @@map("document_status")
+}
+
+enum UpdatePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+
+  @@map("update_priority")
+}
+
+enum UpdateRequestStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  IN_REVIEW
+  CHANGES_REQUESTED
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+
+  @@map("update_request_status")
+}
+
+enum ActivityAction {
+  DOCUMENT_CREATED
+  DOCUMENT_UPDATED
+  UPDATE_REQUEST_CREATED
+  ASSIGNEE_CHANGED
+  STATUS_CHANGED
+  COMMENT_ADDED
+  REVIEW_REQUESTED
+  CHANGES_REQUESTED
+  APPROVED
+  PUBLISHED
+  DEADLINE_CHANGED
+
+  @@map("activity_action")
+}

@@ -304,3 +304,22 @@ hostname -I
 ```
 
 別PCからアクセスする場合は、ランナーのOSやクラウド環境のファイアウォールでTCPポート `3000` を許可してください。
+
+## データ永続化設計
+
+PostgreSQLとPrismaを前提とした初期スキーマを追加しています。
+
+- Prisma schema: [`prisma/schema.prisma`](prisma/schema.prisma)
+- Prisma CLI設定: [`prisma.config.ts`](prisma.config.ts)
+- 環境変数例: [`.env.example`](.env.example)
+- 設計資料: [`docs/data-model.md`](docs/data-model.md)
+
+定義済みテーブル：
+
+- `members`
+- `documents`
+- `update_requests`
+- `comments`
+- `activity_logs`
+
+現時点ではデータモデルのみで、PostgreSQLコンテナ、マイグレーション、API接続はまだ追加していません。
