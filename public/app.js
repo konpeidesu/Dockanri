@@ -15,6 +15,7 @@ const state = {
   statusFilter: "すべて",
   moduleFilter: "すべて",
   updatedFilter: "すべて",
+  documentFrequencySort: "default",
   historyDocumentFilter: "すべて",
   historyModuleFilter: "すべて",
   historyCategoryFilter: "すべて",
@@ -188,8 +189,8 @@ function metricCard(label, value, note, icon, filter, accent = "var(--green)", s
 
 function completionRankings() {
   const completedLogs = state.activityLogs.filter((log) => log.action === "完了" || (log.action === "ステータス変更" && log.afterValue === "完了"));
-  const documentCounts = new Map();
-  const moduleCounts = new Map();
+  const documentCounts = new Map(state.documents.map((doc) => [doc.id, 0]));
+  const moduleCounts = new Map(state.modules.map((module) => [module.id, 0]));
 
   completedLogs.forEach((log) => {
     const doc = documentById(log.documentId);
@@ -210,7 +211,19 @@ function completionRankings() {
     .sort((a, b) => b.count - a.count || a.module.name.localeCompare(b.module.name, "ja"))
     .slice(0, 10);
 
-  return { documents, modules };
+  const lowDocuments = [...documentCounts.entries()]
+    .map(([documentId, count]) => ({ document: documentById(documentId), count }))
+    .filter((item) => item.document)
+    .sort((a, b) => a.count - b.count || a.document.name.localeCompare(b.document.name, "ja"))
+    .slice(0, 5);
+
+  const lowModules = [...moduleCounts.entries()]
+    .map(([moduleId, count]) => ({ module: moduleById(moduleId), count }))
+    .filter((item) => item.module)
+    .sort((a, b) => a.count - b.count || a.module.name.localeCompare(b.module.name, "ja"))
+    .slice(0, 5);
+
+  return { documents, modules, lowDocuments, lowModules, documentCounts };
 }
 
 function rankingRows(items, type) {
@@ -276,18 +289,32 @@ function renderDashboard() {
       <section class="panel ranking-panel"><div class="panel-header"><div><p class="eyebrow">TOP 10</p><h2>更新頻度の高いドキュメント</h2></div><span class="ranking-basis">完了件数</span></div>
         <div class="ranking-list">${rankingRows(rankings.documents, "document")}</div>
       </section>
+      <section class="panel ranking-panel"><div class="panel-header"><div><p class="eyebrow">BOTTOM 5</p><h2>更新頻度の少ないモジュール</h2></div><span class="ranking-basis">完了件数</span></div>
+        <div class="ranking-list">${rankingRows(rankings.lowModules, "module")}</div>
+      </section>
+      <section class="panel ranking-panel"><div class="panel-header"><div><p class="eyebrow">BOTTOM 5</p><h2>更新頻度の少ないドキュメント</h2></div><span class="ranking-basis">完了件数</span></div>
+        <div class="ranking-list">${rankingRows(rankings.lowDocuments, "document")}</div>
+      </section>
     </div></section>`;
 }
 
 function filteredDocuments() {
   const query = state.search.toLowerCase();
-  return state.documents.filter((doc) => {
+  const docs = state.documents.filter((doc) => {
     const module = moduleById(doc.moduleId)?.name || "";
     const owner = memberById(doc.ownerId)?.name || "";
     const searchable = [doc.name, doc.category, module, owner, doc.id].some((value) => value.toLowerCase().includes(query));
     const statusMatch = state.statusFilter === "すべて" || doc.status === state.statusFilter || (state.statusFilter === "期限超過" && isOverdue(doc));
     return searchable && statusMatch && (state.moduleFilter === "すべて" || doc.moduleId === state.moduleFilter) && matchesUpdatedFilter(doc);
   });
+  if (state.documentFrequencySort !== "default") {
+    const counts = completionRankings().documentCounts;
+    docs.sort((a, b) => {
+      const difference = (counts.get(a.id) || 0) - (counts.get(b.id) || 0);
+      return state.documentFrequencySort === "asc" ? difference : -difference;
+    });
+  }
+  return docs;
 }
 
 function matchesUpdatedFilter(doc) {
@@ -304,11 +331,12 @@ function matchesUpdatedFilter(doc) {
 function renderDocuments() {
   const docs = filteredDocuments();
   const actions = `<button class="secondary-button compact-button" id="importDocuments">↑ CSVインポート</button><button class="secondary-button compact-button" id="exportDocuments">↓ CSVエクスポート</button><button class="primary-button compact-button" id="addDocument">＋ ドキュメント追加</button>`;
-  app.innerHTML = `<section class="page">${pageHeader("DOCUMENTS", "ドキュメント台帳", "資料名を選択すると右側に詳細と履歴を表示します。", actions)}
+  app.innerHTML = `<section class="page">${pageHeader("DOCUMENTS", "ドキュメント一覧", "資料名を選択すると右側に詳細と履歴を表示します。", actions)}
     <div class="toolbar"><input class="filter-input" id="documentSearch" type="search" placeholder="資料名、担当者で検索..." value="${escapeHtml(state.search)}">
       <select class="filter-select" id="statusFilter">${["すべて", "未着手", "対応中", "完了", "保留", "期限超過"].map((item) => `<option ${state.statusFilter === item ? "selected" : ""}>${item}</option>`).join("")}</select>
       <select class="filter-select" id="moduleFilter"><option>すべて</option>${state.modules.map((module) => `<option value="${module.id}" ${state.moduleFilter === module.id ? "selected" : ""}>${escapeHtml(module.name)}</option>`).join("")}</select>
       <select class="filter-select" id="updatedFilter"><option value="すべて">最終更新日：すべて</option><option value="1m" ${state.updatedFilter === "1m" ? "selected" : ""}>1ヶ月以内</option><option value="3m" ${state.updatedFilter === "3m" ? "selected" : ""}>3ヶ月以内</option><option value="6m" ${state.updatedFilter === "6m" ? "selected" : ""}>6ヶ月以内</option><option value="1y_stale" ${state.updatedFilter === "1y_stale" ? "selected" : ""}>1年以上更新なし</option></select>
+      <select class="filter-select" id="frequencySort"><option value="default">更新頻度：標準</option><option value="desc" ${state.documentFrequencySort === "desc" ? "selected" : ""}>更新頻度が多い順</option><option value="asc" ${state.documentFrequencySort === "asc" ? "selected" : ""}>更新頻度が少ない順</option></select>
     </div>
     <section class="panel table-panel"><table class="data-table"><thead><tr><th>ドキュメント</th><th>モジュール</th><th>担当者</th><th>優先度</th><th>ステータス</th><th>更新希望期限</th><th>最終更新日</th></tr></thead>
     <tbody>${docs.map((doc) => `<tr class="${state.selectedDocumentId === doc.id ? "selected-row" : ""}"><td class="doc-cell"><button class="document-link" data-document-id="${doc.id}">${escapeHtml(doc.name)}</button><span>${doc.id} · ${escapeHtml(doc.category)}</span></td>
@@ -337,7 +365,7 @@ function renderRequests() {
 
 function renderMembers() {
   const actions = `<button class="secondary-button compact-button" id="importMembers">↑ CSVインポート</button><button class="secondary-button compact-button" id="exportMembers">↓ CSVエクスポート</button><button class="primary-button compact-button" id="addMember">＋ ユーザー追加</button>`;
-  app.innerHTML = `<section class="page">${pageHeader("USER MANAGEMENT", "ユーザー管理", "ロールと担当モジュールを管理します。", actions)}
+  app.innerHTML = `<section class="page">${pageHeader("USERS", "ユーザー", "ロールと担当モジュールを管理します。", actions)}
     <section class="panel table-panel"><table class="data-table"><thead><tr><th>ユーザー</th><th>ロール</th><th>担当モジュール</th><th>状態</th><th></th></tr></thead>
     <tbody>${state.members.map((member) => `<tr><td><div class="owner-cell">${avatar(member.id)}<div class="doc-cell"><strong>${escapeHtml(member.name)}</strong><span>${member.id}</span></div></div></td>
       <td><span class="module-pill">${member.role}</span></td><td><div class="tag-list">${member.moduleIds.map((id) => `<span>${escapeHtml(moduleById(id)?.name || id)}</span>`).join("") || "—"}</div></td>
@@ -352,7 +380,7 @@ function renderMembers() {
 }
 
 function renderModules() {
-  app.innerHTML = `<section class="page">${pageHeader("MODULE MASTER", "モジュール管理", "重要モジュールは優先度の自動計算に利用されます。", '<button class="primary-button compact-button" id="addModule">＋ モジュール追加</button>')}
+  app.innerHTML = `<section class="page">${pageHeader("MODULES", "モジュール", "重要モジュールは優先度の自動計算に利用されます。", '<button class="primary-button compact-button" id="addModule">＋ モジュール追加</button>')}
     <section class="panel table-panel"><table class="data-table"><thead><tr><th>モジュール</th><th>重要モジュール</th><th>状態</th><th></th></tr></thead>
     <tbody>${state.modules.map((module) => `<tr><td class="doc-cell"><strong>${escapeHtml(module.name)}</strong><span>${module.id}</span></td>
       <td><span class="important-badge ${module.isImportant ? "important" : ""}">${module.isImportant ? "重要" : "通常"}</span></td>
@@ -365,7 +393,7 @@ function renderModules() {
 }
 
 function renderRules() {
-  app.innerHTML = `<section class="page">${pageHeader("DOCUMENT TYPES", "ドキュメント種別管理", "種別ごとの管理ロールと重要度を定義し、優先度・期限・担当者判定へ反映します。", '<button class="primary-button compact-button" id="addRule">＋ 種別追加</button>')}
+  app.innerHTML = `<section class="page">${pageHeader("DOCUMENT TYPES", "ドキュメント種別", "種別ごとの管理ロールと重要度を定義し、優先度・期限・担当者判定へ反映します。", '<button class="primary-button compact-button" id="addRule">＋ 種別追加</button>')}
     <section class="panel table-panel"><table class="data-table"><thead><tr><th>ドキュメント種別</th><th>管理ロール</th><th>重要ドキュメント</th><th></th></tr></thead>
     <tbody>${state.rules.map((rule) => `<tr><td class="doc-cell"><strong>${escapeHtml(rule.category)}</strong><span>${rule.id}</span></td>
       <td><div class="tag-list">${rule.roles.map((role) => `<span>${role}</span>`).join("")}</div></td>
@@ -374,6 +402,20 @@ function renderRules() {
   $("#addRule").addEventListener("click", () => openRuleModal());
   $$("[data-edit-rule]").forEach((button) => button.addEventListener("click", () => openRuleModal(button.dataset.editRule)));
   $$("[data-delete-rule]").forEach((button) => button.addEventListener("click", () => deleteRule(button.dataset.deleteRule)));
+}
+
+function renderAdministrators() {
+  const roleMembers = (moduleId, role) => {
+    const names = state.members
+      .filter((member) => member.isActive && member.role === role && member.moduleIds.includes(moduleId))
+      .map((member) => member.name);
+    return names.length ? names.map((name) => `<span class="administrator-name">${escapeHtml(name)}</span>`).join("") : '<span class="unset-label">未設定</span>';
+  };
+  app.innerHTML = `<section class="page">${pageHeader("ADMINISTRATORS", "管理者一覧", "モジュールごとのロール別担当者を確認できます。")}
+    <section class="panel table-panel"><table class="data-table administrator-table"><thead><tr><th>モジュール</th><th>SE</th><th>PE</th><th>CSM</th><th>PSE</th></tr></thead>
+      <tbody>${state.modules.map((module) => `<tr><td class="doc-cell"><strong>${escapeHtml(module.name)}</strong><span>${module.isActive ? "有効" : "無効"}</span></td>
+        ${["SE", "PE", "CSM", "PSE"].map((role) => `<td><div class="administrator-list">${roleMembers(module.id, role)}</div></td>`).join("")}</tr>`).join("")}</tbody>
+    </table></section></section>`;
 }
 
 function filteredHistory() {
@@ -410,6 +452,7 @@ function render() {
   else if (state.page === "history") renderHistory();
   else if (state.page === "members") renderMembers();
   else if (state.page === "modules") renderModules();
+  else if (state.page === "administrators") renderAdministrators();
   else if (state.page === "rules") renderRules();
   else renderPlaceholder();
   bindCommon();
@@ -443,7 +486,7 @@ function openFilteredDocuments(filter) {
 
 function applyUrl() {
   const path = location.pathname.split("/").filter(Boolean)[0] || "dashboard";
-  state.page = ["documents", "requests", "history", "members", "modules", "rules", "settings"].includes(path) ? path : "dashboard";
+  state.page = ["documents", "requests", "history", "members", "modules", "administrators", "rules", "settings"].includes(path) ? path : "dashboard";
   const params = new URLSearchParams(location.search);
   const status = params.get("status");
   state.statusFilter = params.get("filter") === "overdue" ? "期限超過" : (QUERY_STATUS[status] || "すべて");
@@ -460,6 +503,7 @@ function bindDocumentFilters() {
   });
   $("#moduleFilter").addEventListener("change", (event) => { state.moduleFilter = event.target.value; renderDocuments(); bindCommon(); });
   $("#updatedFilter").addEventListener("change", (event) => { state.updatedFilter = event.target.value; renderDocuments(); bindCommon(); });
+  $("#frequencySort").addEventListener("change", (event) => { state.documentFrequencySort = event.target.value; renderDocuments(); bindCommon(); });
 }
 
 function openDetailPanel(documentId) {
@@ -485,7 +529,6 @@ function openDetailPanel(documentId) {
         <div class="modal-actions"><button class="primary-button compact-button" type="submit">変更を保存</button></div>
       </form>
     </section>
-    <section class="detail-section"><h3>メモ</h3><p class="detail-memo">${escapeHtml(doc.memo || "メモはありません。")}</p></section>
     <section class="detail-section"><div class="section-title-row"><h3>更新タイムライン</h3><span>${logs.length}件</span></div>
       <div class="mini-timeline">${logs.length ? logs.map((log) => `<article class="mini-timeline-item"><span class="mini-timeline-dot"></span><div>
         <div class="timeline-heading"><strong>${escapeHtml(log.action)}</strong><time>${log.time}</time></div>
@@ -801,12 +844,6 @@ $("#requestDocument").addEventListener("change", updateRequestPreview);
 $("#requestDeadline").addEventListener("change", updateRequestPreview);
 $("#documentModule").addEventListener("change", updateDocumentPreview);
 $("#documentCategory").addEventListener("change", updateDocumentPreview);
-
-$("#globalSearch").addEventListener("input", (event) => {
-  state.search = event.target.value;
-  if (state.search && !["documents", "requests"].includes(state.page)) state.page = "documents";
-  render();
-});
 
 $("#memberCsvInput").addEventListener("change", async (event) => { if (event.target.files[0]) await importMembers(event.target.files[0]); event.target.value = ""; });
 $("#documentCsvInput").addEventListener("change", async (event) => { if (event.target.files[0]) await importDocuments(event.target.files[0]); event.target.value = ""; });
