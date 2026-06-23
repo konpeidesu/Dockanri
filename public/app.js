@@ -185,6 +185,50 @@ function metricCard(label, value, note, icon, filter, accent = "var(--green)", s
     <span class="metric-value">${value}</span><span class="metric-note">${note}</span></button>`;
 }
 
+function completionRankings() {
+  const completedLogs = state.activityLogs.filter((log) => log.action === "完了" || (log.action === "ステータス変更" && log.afterValue === "完了"));
+  const documentCounts = new Map();
+  const moduleCounts = new Map();
+
+  completedLogs.forEach((log) => {
+    const doc = documentById(log.documentId);
+    if (!doc) return;
+    documentCounts.set(doc.id, (documentCounts.get(doc.id) || 0) + 1);
+    moduleCounts.set(doc.moduleId, (moduleCounts.get(doc.moduleId) || 0) + 1);
+  });
+
+  const documents = [...documentCounts.entries()]
+    .map(([documentId, count]) => ({ document: documentById(documentId), count }))
+    .filter((item) => item.document)
+    .sort((a, b) => b.count - a.count || a.document.name.localeCompare(b.document.name, "ja"))
+    .slice(0, 10);
+
+  const modules = [...moduleCounts.entries()]
+    .map(([moduleId, count]) => ({ module: moduleById(moduleId), count }))
+    .filter((item) => item.module)
+    .sort((a, b) => b.count - a.count || a.module.name.localeCompare(b.module.name, "ja"))
+    .slice(0, 10);
+
+  return { documents, modules };
+}
+
+function rankingRows(items, type) {
+  if (!items.length) return '<div class="ranking-empty">完了した更新履歴はまだありません。</div>';
+  return items.map((item, index) => {
+    const isDocument = type === "document";
+    const name = isDocument ? item.document.name : item.module.name;
+    const moduleName = isDocument ? moduleById(item.document.moduleId)?.name : "";
+    return `<div class="ranking-row">
+      <span class="ranking-position ${index < 3 ? "top" : ""}">${index + 1}</span>
+      <div class="ranking-name">
+        ${isDocument ? `<button class="document-link" data-document-id="${item.document.id}">${escapeHtml(name)}</button>` : `<strong>${escapeHtml(name)}</strong>`}
+        ${moduleName ? `<span>${escapeHtml(moduleName)}</span>` : ""}
+      </div>
+      <strong class="ranking-count">${item.count}<small>件</small></strong>
+    </div>`;
+  }).join("");
+}
+
 function requestRows(requests) {
   if (!requests.length) return '<div class="empty-state">条件に一致する更新依頼はありません。</div>';
   return requests.map((request) => {
@@ -204,6 +248,7 @@ function renderDashboard() {
   const chartStatuses = ["未着手", "対応中", "完了", "保留"];
   const maxStatusCount = Math.max(1, overdue, ...chartStatuses.map(count));
   const chartColors = ["#8a958f", "#3976a8", "#2d8b62", "#756493"];
+  const rankings = completionRankings();
   app.innerHTML = `<section class="page">${pageHeader("OVERVIEW", "おはようございます、加藤さん", "カードを選択すると対象ドキュメントへ移動します。")}
     <div class="metrics">
       ${metricCard("総ドキュメント", state.documents.length, "すべて表示", "▤", "")}
@@ -224,6 +269,14 @@ function renderDashboard() {
           <span class="status-chart-track"><span class="status-chart-bar" style="width:${overdue / maxStatusCount * 100}%;--bar:#bd4242"></span></span></button></div></section>
         <section class="panel activity-panel"><div class="panel-header"><h2>最近のアクティビティ</h2><button class="text-button" data-navigate="history">履歴 →</button></div>
         <div class="activity-list">${state.activityLogs.slice(0, 3).map((item) => `<div class="activity-item"><span class="activity-symbol">↺</span><div><p><strong>${escapeHtml(item.actor)}</strong>：${escapeHtml(item.action)}</p><time>${item.time}</time></div></div>`).join("")}</div></section></div>
+    </div>
+    <div class="ranking-grid">
+      <section class="panel ranking-panel"><div class="panel-header"><div><p class="eyebrow">TOP 10</p><h2>更新頻度の高いモジュール</h2></div><span class="ranking-basis">完了件数</span></div>
+        <div class="ranking-list">${rankingRows(rankings.modules, "module")}</div>
+      </section>
+      <section class="panel ranking-panel"><div class="panel-header"><div><p class="eyebrow">TOP 10</p><h2>更新頻度の高いドキュメント</h2></div><span class="ranking-basis">完了件数</span></div>
+        <div class="ranking-list">${rankingRows(rankings.documents, "document")}</div>
+      </section>
     </div></section>`;
 }
 
@@ -334,7 +387,7 @@ function filteredHistory() {
 
 function renderHistory() {
   const logs = filteredHistory();
-  app.innerHTML = `<section class="page">${pageHeader("DOCUMENT HISTORY", "更新履歴", "ドキュメントごとの操作履歴を確認できます。")}
+  app.innerHTML = `<section class="page">${pageHeader("DOCUMENT HISTORY LOG", "更新履歴ログ", "ドキュメントごとの操作履歴を確認できます。")}
     <div class="toolbar"><select class="filter-select" id="historyDocumentFilter"><option>すべて</option>${state.documents.map((doc) => `<option value="${doc.id}" ${state.historyDocumentFilter === doc.id ? "selected" : ""}>${escapeHtml(doc.name)}</option>`).join("")}</select>
       <select class="filter-select" id="historyModuleFilter"><option>すべて</option>${state.modules.map((module) => `<option value="${module.id}" ${state.historyModuleFilter === module.id ? "selected" : ""}>${escapeHtml(module.name)}</option>`).join("")}</select>
       <select class="filter-select" id="historyCategoryFilter"><option>すべて</option>${state.rules.map((rule) => `<option ${state.historyCategoryFilter === rule.category ? "selected" : ""}>${escapeHtml(rule.category)}</option>`).join("")}</select></div>

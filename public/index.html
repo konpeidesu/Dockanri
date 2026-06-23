@@ -28,15 +28,12 @@
             <span class="nav-icon">⌂</span><span>ダッシュボード</span>
           </button>
           <button class="nav-item" data-page="documents">
-            <span class="nav-icon">▤</span><span>ドキュメント</span>
+            <span class="nav-icon">▤</span><span>ドキュメント一覧</span>
             <span class="nav-count" id="documentNavCount">24</span>
           </button>
           <button class="nav-item" data-page="requests">
             <span class="nav-icon">↗</span><span>更新依頼</span>
             <span class="nav-count alert" id="requestNavCount">8</span>
-          </button>
-          <button class="nav-item" data-page="history">
-            <span class="nav-icon">↺</span><span>更新履歴</span>
           </button>
         </nav>
 
@@ -45,6 +42,7 @@
           <button class="nav-item muted" data-page="members"><span class="nav-icon">♙</span><span>ユーザー管理</span></button>
           <button class="nav-item muted" data-page="modules"><span class="nav-icon">◇</span><span>モジュール管理</span></button>
           <button class="nav-item muted" data-page="rules"><span class="nav-icon">☷</span><span>ドキュメント種別管理</span></button>
+          <button class="nav-item muted" data-page="history"><span class="nav-icon">↺</span><span>更新履歴ログ</span></button>
           <button class="nav-item muted" data-page="settings"><span class="nav-icon">⚙</span><span>設定</span></button>
         </div>
 
@@ -102,7 +100,7 @@
             <label>更新希望期限（任意）
               <input id="requestDeadline" type="date" />
             </label>
-            <label>添付URL
+            <label>添付URL（任意）
               <input id="requestAttachmentUrl" type="url" placeholder="https://..." />
             </label>
           </div>
