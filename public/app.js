@@ -251,7 +251,7 @@ function renderDashboard() {
   const maxStatusCount = Math.max(1, overdue, ...chartStatuses.map(count));
   const chartColors = ["#8a958f", "#3976a8", "#2d8b62", "#756493"];
   const rankings = completionRankings();
-  app.innerHTML = `<section class="page">${pageHeader("OVERVIEW", "おはようございます、加藤さん", "カードを選択すると対象ドキュメントへ移動します。")}
+  app.innerHTML = `<section class="page dashboard-page">
     <div class="metrics">
       ${metricCard("総ドキュメント", state.documents.length, "すべて表示", "▤", "")}
       ${metricCard("期限超過", overdue, "要対応", "!", "overdue", "#bd4242", "#fcebea")}
@@ -490,7 +490,7 @@ function openDetailPanel(documentId) {
       <div class="mini-timeline">${logs.length ? logs.map((log) => `<article class="mini-timeline-item"><span class="mini-timeline-dot"></span><div>
         <div class="timeline-heading"><strong>${escapeHtml(log.action)}</strong><time>${log.time}</time></div>
         ${log.afterValue ? `<p class="timeline-result">${escapeHtml(log.afterValue)}</p>` : `<p>${escapeHtml(log.changeSummary || "—")}</p>`}
-        ${log.comment ? `<p class="timeline-comment">コメント：${escapeHtml(log.comment)}</p>` : ""}<span>実施ユーザー：${escapeHtml(log.actor)}</span>
+        ${log.comment ? `<p class="timeline-comment">コメント：${escapeHtml(log.comment)}</p>` : ""}
       </div></article>`).join("") : '<p class="empty-timeline">履歴はまだありません。</p>'}</div></section></div>`;
   detailPanel.classList.add("open");
   detailBackdrop.classList.remove("hidden");
@@ -890,7 +890,6 @@ $("#requestForm").addEventListener("submit", (event) => {
 
 addEventListener("popstate", () => { applyUrl(); closeDetailPanel(); render(); });
 addEventListener("keydown", (event) => {
-  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#globalSearch").focus(); }
   if (event.key === "Escape") { closeDetailPanel(); [requestModal, documentModal, moduleModal, memberModal, ruleModal].forEach((modal) => { if (!modal.classList.contains("hidden")) closeModal(modal, modal.querySelector("form")); }); }
 });
 
