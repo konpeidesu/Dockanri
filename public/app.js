@@ -421,7 +421,7 @@ function openDetailPanel(documentId) {
     <section class="detail-section"><div class="section-title-row"><h3>更新タイムライン</h3><span>${logs.length}件</span></div>
       <div class="mini-timeline">${logs.length ? logs.map((log) => `<article class="mini-timeline-item"><span class="mini-timeline-dot"></span><div>
         <div class="timeline-heading"><strong>${escapeHtml(log.action)}</strong><time>${log.time}</time></div>
-        ${log.beforeValue || log.afterValue ? `<div class="audit-change"><span>${escapeHtml(log.beforeValue || "—")}</span><i>→</i><span>${escapeHtml(log.afterValue || "—")}</span></div>` : `<p>${escapeHtml(log.changeSummary || "—")}</p>`}
+        ${log.afterValue ? `<p class="timeline-result">${escapeHtml(log.afterValue)}</p>` : `<p>${escapeHtml(log.changeSummary || "—")}</p>`}
         ${log.comment ? `<p class="timeline-comment">コメント：${escapeHtml(log.comment)}</p>` : ""}<span>実施ユーザー：${escapeHtml(log.actor)}</span>
       </div></article>`).join("") : '<p class="empty-timeline">履歴はまだありません。</p>'}</div></section></div>`;
   detailPanel.classList.add("open");
