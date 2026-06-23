@@ -121,7 +121,7 @@ h3 { font-size: 15px; }
 .page-header > div > p:last-child { margin: 0; color: var(--muted); }
 .date-chip { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: white; font-size: 12px; }
 
-.metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
 .metric-card { position: relative; overflow: hidden; padding: 21px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); text-align: left; }
 .metric-card::after { content: ""; width: 70px; height: 70px; position: absolute; right: -25px; bottom: -30px; border-radius: 50%; background: var(--accent-soft, var(--green-soft)); }
 .metric-button { display: block; width: 100%; color: inherit; font: inherit; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
@@ -375,7 +375,7 @@ form input:focus, form select:focus, form textarea:focus { border-color: #74ac91
   .page-header { flex-direction: column; }
   .page-actions { width: 100%; justify-content: flex-start; }
   .date-chip { display: none; }
-  .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .metrics { grid-template-columns: 1fr; gap: 10px; }
   .metric-card { padding: 15px; }
   .metric-value { font-size: 25px; }
   .right-column { grid-template-columns: 1fr; }

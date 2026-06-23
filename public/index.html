@@ -116,6 +116,48 @@
       </section>
     </div>
 
+    <div class="modal-backdrop hidden" id="documentModal">
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="documentModalTitle">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">NEW DOCUMENT</p>
+            <h2 id="documentModalTitle">ドキュメントを追加</h2>
+          </div>
+          <button class="modal-close" id="closeDocumentModal" aria-label="閉じる">×</button>
+        </div>
+        <form id="documentForm">
+          <label>ドキュメント名
+            <input id="documentName" required maxlength="255" />
+          </label>
+          <div class="form-grid">
+            <label>モジュール
+              <select id="documentModule" required></select>
+            </label>
+            <label>ドキュメント種別
+              <select id="documentCategory" required></select>
+            </label>
+          </div>
+          <div class="form-grid">
+            <label>Boxリンク
+              <input id="documentBoxUrl" type="url" placeholder="https://..." />
+            </label>
+            <label>サポートサイトリンク
+              <input id="documentSupportUrl" type="url" placeholder="https://..." />
+            </label>
+          </div>
+          <label class="checkbox-label">
+            <input id="documentManaged" type="checkbox" checked />
+            管理対象として登録
+          </label>
+          <div class="auto-assignment-preview" id="documentAutoPreview"></div>
+          <div class="modal-actions">
+            <button type="button" class="secondary-button" id="cancelDocumentModal">キャンセル</button>
+            <button type="submit" class="primary-button">ドキュメントを追加</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
     <input class="hidden" id="memberCsvInput" type="file" accept=".csv,text/csv" />
     <input class="hidden" id="documentCsvInput" type="file" accept=".csv,text/csv" />
 

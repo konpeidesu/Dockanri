@@ -103,6 +103,7 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const app = $("#app");
 const requestModal = $("#requestModal");
+const documentModal = $("#documentModal");
 const moduleModal = $("#moduleModal");
 const memberModal = $("#memberModal");
 const ruleModal = $("#ruleModal");
@@ -245,6 +246,7 @@ function requestRows(requests) {
 function renderDashboard() {
   const count = (status) => state.documents.filter((doc) => doc.status === status).length;
   const overdue = state.documents.filter(isOverdue).length;
+  const requestedDocuments = new Set(state.requests.map((request) => request.documentId)).size;
   const chartStatuses = ["未着手", "対応中", "完了", "保留"];
   const maxStatusCount = Math.max(1, overdue, ...chartStatuses.map(count));
   const chartColors = ["#8a958f", "#3976a8", "#2d8b62", "#756493"];
@@ -252,11 +254,8 @@ function renderDashboard() {
   app.innerHTML = `<section class="page">${pageHeader("OVERVIEW", "おはようございます、加藤さん", "カードを選択すると対象ドキュメントへ移動します。")}
     <div class="metrics">
       ${metricCard("総ドキュメント", state.documents.length, "すべて表示", "▤", "")}
-      ${metricCard("未着手", count("未着手"), "対応待ち", "○", "not_started", "#727c77", "#eff1f0")}
-      ${metricCard("対応中", count("対応中"), "作業中の資料", "↗", "in_progress", "#346a9c", "#e9f1f8")}
-      ${metricCard("完了", count("完了"), "反映済み", "✓", "completed", "#2d8b62", "#e8f3ed")}
-      ${metricCard("保留", count("保留"), "対応見送り", "—", "on_hold", "#756493", "#eeeaf5")}
       ${metricCard("期限超過", overdue, "要対応", "!", "overdue", "#bd4242", "#fcebea")}
+      ${metricCard("更新依頼ドキュメント", requestedDocuments, "依頼がある資料", "↗", "requested", "#346a9c", "#e9f1f8")}
     </div>
     <div class="dashboard-grid"><section class="panel"><div class="panel-header"><h2>優先度の高い更新依頼</h2><button class="text-button" data-navigate="requests">すべて見る →</button></div>
       <div class="request-list">${requestRows(state.requests.slice(0, 5))}</div></section>
@@ -304,7 +303,7 @@ function matchesUpdatedFilter(doc) {
 
 function renderDocuments() {
   const docs = filteredDocuments();
-  const actions = `<button class="secondary-button compact-button" id="importDocuments">↑ CSVインポート</button><button class="secondary-button compact-button" id="exportDocuments">↓ CSVエクスポート</button>`;
+  const actions = `<button class="secondary-button compact-button" id="importDocuments">↑ CSVインポート</button><button class="secondary-button compact-button" id="exportDocuments">↓ CSVエクスポート</button><button class="primary-button compact-button" id="addDocument">＋ ドキュメント追加</button>`;
   app.innerHTML = `<section class="page">${pageHeader("DOCUMENTS", "ドキュメント台帳", "資料名を選択すると右側に詳細と履歴を表示します。", actions)}
     <div class="toolbar"><input class="filter-input" id="documentSearch" type="search" placeholder="資料名、担当者で検索..." value="${escapeHtml(state.search)}">
       <select class="filter-select" id="statusFilter">${["すべて", "未着手", "対応中", "完了", "保留", "期限超過"].map((item) => `<option ${state.statusFilter === item ? "selected" : ""}>${item}</option>`).join("")}</select>
@@ -319,6 +318,7 @@ function renderDocuments() {
   bindDocumentFilters();
   $("#importDocuments").addEventListener("click", () => $("#documentCsvInput").click());
   $("#exportDocuments").addEventListener("click", exportDocuments);
+  $("#addDocument").addEventListener("click", openDocumentModal);
 }
 
 function renderRequests() {
@@ -433,6 +433,10 @@ function navigate(page, query = "") {
 }
 
 function openFilteredDocuments(filter) {
+  if (filter === "requested") {
+    navigate("requests");
+    return;
+  }
   state.statusFilter = filter === "overdue" ? "期限超過" : (QUERY_STATUS[filter] || "すべて");
   navigate("documents", filter === "overdue" ? "?filter=overdue" : (filter ? `?status=${encodeURIComponent(filter)}` : ""));
 }
@@ -568,6 +572,33 @@ function updateRequestPreview() {
   const due = $("#requestDeadline").value || calculateDueDate(priority);
   const assignee = autoAssign(doc);
   $("#requestAutoPreview").innerHTML = `<strong>自動判定</strong><span>優先度：${priority}</span><span>担当者：${escapeHtml(assignee?.name || "該当者なし")}</span><span>期限：${formatDisplayDate(due)}</span>`;
+}
+
+function documentDraft() {
+  return {
+    moduleId: $("#documentModule").value,
+    category: $("#documentCategory").value
+  };
+}
+
+function updateDocumentPreview() {
+  const draft = documentDraft();
+  const priority = calculatePriority(draft);
+  const assignee = autoAssign(draft);
+  $("#documentAutoPreview").innerHTML = `<strong>自動設定</strong>
+    <span>ステータス：未着手</span>
+    <span>優先度：${priority}</span>
+    <span>管理ロール：${escapeHtml(documentManagementRoles(draft))}</span>
+    <span>担当者：${escapeHtml(assignee?.name || "該当者なし")}</span>`;
+}
+
+function openDocumentModal() {
+  $("#documentModule").innerHTML = state.modules.filter((module) => module.isActive).map((module) => `<option value="${module.id}">${escapeHtml(module.name)}</option>`).join("");
+  $("#documentCategory").innerHTML = state.rules.map((rule) => `<option value="${escapeHtml(rule.category)}">${escapeHtml(rule.category)}</option>`).join("");
+  $("#documentManaged").checked = true;
+  documentModal.classList.remove("hidden");
+  updateDocumentPreview();
+  $("#documentName").focus();
 }
 
 function openRequestModal() {
@@ -755,6 +786,8 @@ $$(".nav-item[data-page]").forEach((item) => item.addEventListener("click", () =
 $("#newRequestButton").addEventListener("click", openRequestModal);
 $("#closeModal").addEventListener("click", () => closeModal(requestModal, $("#requestForm")));
 $("#cancelModal").addEventListener("click", () => closeModal(requestModal, $("#requestForm")));
+$("#closeDocumentModal").addEventListener("click", () => closeModal(documentModal, $("#documentForm")));
+$("#cancelDocumentModal").addEventListener("click", () => closeModal(documentModal, $("#documentForm")));
 $("#closeModuleModal").addEventListener("click", () => closeModal(moduleModal, $("#moduleForm")));
 $("#cancelModuleModal").addEventListener("click", () => closeModal(moduleModal, $("#moduleForm")));
 $("#closeMemberModal").addEventListener("click", () => closeModal(memberModal, $("#memberForm")));
@@ -763,9 +796,11 @@ $("#closeRuleModal").addEventListener("click", () => closeModal(ruleModal, $("#r
 $("#cancelRuleModal").addEventListener("click", () => closeModal(ruleModal, $("#ruleForm")));
 $("#mobileMenu").addEventListener("click", () => $(".sidebar").classList.toggle("open"));
 detailBackdrop.addEventListener("click", closeDetailPanel);
-[requestModal, moduleModal, memberModal, ruleModal].forEach((modal) => modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(modal, modal.querySelector("form")); }));
+[requestModal, documentModal, moduleModal, memberModal, ruleModal].forEach((modal) => modal.addEventListener("click", (event) => { if (event.target === modal) closeModal(modal, modal.querySelector("form")); }));
 $("#requestDocument").addEventListener("change", updateRequestPreview);
 $("#requestDeadline").addEventListener("change", updateRequestPreview);
+$("#documentModule").addEventListener("change", updateDocumentPreview);
+$("#documentCategory").addEventListener("change", updateDocumentPreview);
 
 $("#globalSearch").addEventListener("input", (event) => {
   state.search = event.target.value;
@@ -775,6 +810,37 @@ $("#globalSearch").addEventListener("input", (event) => {
 
 $("#memberCsvInput").addEventListener("change", async (event) => { if (event.target.files[0]) await importMembers(event.target.files[0]); event.target.value = ""; });
 $("#documentCsvInput").addEventListener("change", async (event) => { if (event.target.files[0]) await importDocuments(event.target.files[0]); event.target.value = ""; });
+
+$("#documentForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const draft = documentDraft();
+  const assignee = autoAssign(draft);
+  if (!assignee) return showToast("管理ロールとモジュールに一致する有効ユーザーがいません", true);
+  const now = new Date();
+  const doc = {
+    id: nextId("DOC", state.documents),
+    name: $("#documentName").value.trim(),
+    moduleId: draft.moduleId,
+    category: draft.category,
+    boxUrl: $("#documentBoxUrl").value.trim(),
+    supportUrl: $("#documentSupportUrl").value.trim(),
+    ownerId: assignee.id,
+    status: "未着手",
+    priority: calculatePriority(draft),
+    desiredDueDate: "",
+    memo: "",
+    isManaged: $("#documentManaged").checked,
+    updated: formatDateTime(now),
+    updatedBy: CURRENT_USER
+  };
+  state.documents.unshift(doc);
+  addActivityLog(doc.id, "ドキュメント更新", "—", "ドキュメントを新規登録", "ドキュメント台帳へ追加");
+  $("#documentNavCount").textContent = state.documents.length;
+  closeModal(documentModal, $("#documentForm"));
+  renderDocuments();
+  bindCommon();
+  showToast("ドキュメントを追加しました");
+});
 
 $("#memberForm").addEventListener("submit", (event) => {
   event.preventDefault();
@@ -825,7 +891,7 @@ $("#requestForm").addEventListener("submit", (event) => {
 addEventListener("popstate", () => { applyUrl(); closeDetailPanel(); render(); });
 addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#globalSearch").focus(); }
-  if (event.key === "Escape") { closeDetailPanel(); [requestModal, moduleModal, memberModal, ruleModal].forEach((modal) => { if (!modal.classList.contains("hidden")) closeModal(modal, modal.querySelector("form")); }); }
+  if (event.key === "Escape") { closeDetailPanel(); [requestModal, documentModal, moduleModal, memberModal, ruleModal].forEach((modal) => { if (!modal.classList.contains("hidden")) closeModal(modal, modal.querySelector("form")); }); }
 });
 
 applyUrl();
