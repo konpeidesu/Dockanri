@@ -9,6 +9,7 @@ const STATUS_QUERY = {
 };
 const QUERY_STATUS = Object.fromEntries(Object.entries(STATUS_QUERY).map(([label, value]) => [value, label]));
 const avatarColors = ["green", "blue", "orange", "purple"];
+const CURRENT_USER = "川合";
 
 const state = {
   page: "dashboard",
@@ -21,21 +22,41 @@ const state = {
   historyCategoryFilter: "すべて",
   selectedDocumentId: null,
   members: [
-    { id: "USR-001", name: "田中 美咲", role: "SE", moduleIds: ["MOD-001", "MOD-005", "MOD-006"], isActive: true },
-    { id: "USR-002", name: "佐藤 健", role: "PE", moduleIds: ["MOD-002", "MOD-005", "MOD-006"], isActive: true },
-    { id: "USR-003", name: "鈴木 彩", role: "CSM", moduleIds: ["MOD-003", "MOD-007"], isActive: true },
-    { id: "USR-004", name: "山本 拓也", role: "PSE", moduleIds: ["MOD-002", "MOD-003", "MOD-004"], isActive: true },
-    { id: "USR-005", name: "加藤 翔太", role: "SE", moduleIds: ["MOD-001", "MOD-002", "MOD-003", "MOD-004"], isActive: true },
-    { id: "USR-006", name: "高橋 直子", role: "PE", moduleIds: ["MOD-005"], isActive: false }
+    { id: "USR-001", name: "田中 美咲", role: "SE", moduleIds: ["MOD-001", "MOD-013", "MOD-014", "MOD-017", "MOD-020"], isActive: true },
+    { id: "USR-002", name: "佐藤 健", role: "PE", moduleIds: ["MOD-003", "MOD-017", "MOD-019", "MOD-020"], isActive: true },
+    { id: "USR-003", name: "鈴木 彩", role: "CSM", moduleIds: ["MOD-013", "MOD-015", "MOD-016"], isActive: true },
+    { id: "USR-004", name: "山本 拓也", role: "PSE", moduleIds: ["MOD-013", "MOD-014", "MOD-019"], isActive: true },
+    { id: "USR-005", name: "加藤 翔太", role: "SE", moduleIds: ["MOD-001", "MOD-002", "MOD-013", "MOD-014", "MOD-019"], isActive: true },
+    { id: "USR-006", name: "高橋 直子", role: "PE", moduleIds: ["MOD-017", "MOD-018"], isActive: false }
   ],
   modules: [
     { id: "MOD-001", name: "Platform", description: "Falcon Platform全般", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-002", name: "PIO", description: "Platform Implementation & Operations", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/17" },
-    { id: "MOD-003", name: "Cloud Security", description: "クラウドセキュリティ製品群", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
-    { id: "MOD-004", name: "ITP/ITD", description: "Identity Threat Protection / Detection", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
-    { id: "MOD-005", name: "NG-SIEM", description: "Next-Gen SIEM", isActive: true, isImportant: true, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
-    { id: "MOD-006", name: "Mobile", description: "モバイル端末保護", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
-    { id: "MOD-007", name: "Shield", description: "Shield関連資料", isActive: false, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" }
+    { id: "MOD-002", name: "Multi-CID (Flight Control)", description: "マルチテナント管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-003", name: "Prevent,Insight", description: "防御・検知機能", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-004", name: "OverWatch", description: "脅威ハンティング", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-005", name: "Complete", description: "マネージドサービス", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-006", name: "DataProtection", description: "データ保護", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-007", name: "DeviceControl", description: "デバイス制御", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-008", name: "Firewall Management", description: "ファイアウォール管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-009", name: "ExposureManagement", description: "エクスポージャー管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-010", name: "Discover", description: "IT資産可視化", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-011", name: "Spotlight", description: "脆弱性管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-012", name: "Surface", description: "外部攻撃対象領域管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-013", name: "Cloud Security", description: "クラウドセキュリティ製品群", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
+    { id: "MOD-014", name: "ITP/ITD", description: "Identity Threat Protection / Detection", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
+    { id: "MOD-015", name: "Sheild", description: "Sheild関連資料", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
+    { id: "MOD-016", name: "Privileged access", description: "特権アクセス管理", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
+    { id: "MOD-017", name: "NG-SIEM", description: "Next-Gen SIEM", isActive: true, isImportant: true, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-018", name: "Logscale/LTR", description: "ログ管理・長期保管", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-019", name: "FDR", description: "Falcon Data Replicator", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-020", name: "Mobile", description: "モバイル端末保護", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
+    { id: "MOD-021", name: "ForIT", description: "IT運用向け機能", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-022", name: "Charlotte AI", description: "生成AI支援機能", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-023", name: "Intelligence", description: "脅威インテリジェンス", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-024", name: "FileVantage", description: "ファイル整合性監視", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-025", name: "Foundry", description: "アプリケーション開発基盤", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-026", name: "CloudTranslator", description: "クラウド設定変換", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-027", name: "AIDR", description: "AI Detection and Response", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" }
   ],
   rules: [
     { id: "RULE-001", category: "製品紹介資料", roles: ["SE"], isImportant: true },
@@ -53,12 +74,12 @@ const state = {
   ],
   documents: [
     { id: "DOC-024", name: "Falcon Platform 製品紹介資料", category: "製品紹介資料", moduleId: "MOD-001", boxUrl: "https://box.example.com/falcon-intro", supportUrl: "https://support.example.com/falcon", ownerId: "USR-001", status: "レビュー待ち", priority: "高", desiredDueDate: "2026-06-30", memo: "Charlotte AIの新機能を追記", isManaged: true, updated: "2026/06/18 14:18", updatedBy: "田中 美咲" },
-    { id: "DOC-023", name: "FDR 導入ガイド", category: "導入手順書/インストール", moduleId: "MOD-002", boxUrl: "https://box.example.com/fdr-guide", supportUrl: "https://support.example.com/fdr", ownerId: "USR-004", status: "対応中", priority: "高", desiredDueDate: "2026-07-02", memo: "セットアップ画面の差し替え", isManaged: true, updated: "2026/06/17 09:30", updatedBy: "山本 拓也" },
-    { id: "DOC-022", name: "Cloud Security 提案テンプレート", category: "提案関係", moduleId: "MOD-003", boxUrl: "https://box.example.com/cloud-proposal", supportUrl: "https://support.example.com/cloud", ownerId: "USR-005", status: "差し戻し", priority: "低", desiredDueDate: "2026-06-20", memo: "ライセンス体系と構成図を修正", isManaged: true, updated: "2026/06/15 11:05", updatedBy: "鈴木 彩" },
-    { id: "DOC-021", name: "Identity Protection POVガイド", category: "POV/トライアルガイド", moduleId: "MOD-004", boxUrl: "https://box.example.com/identity-pov", supportUrl: "https://support.example.com/identity", ownerId: "USR-005", status: "対応中", priority: "高", desiredDueDate: "2026-06-28", memo: "検証シナリオを更新", isManaged: true, updated: "2026/06/14 16:00", updatedBy: "山本 拓也" },
-    { id: "DOC-020", name: "NG-SIEM 操作手順書", category: "操作手順書", moduleId: "MOD-005", boxUrl: "https://box.example.com/ngsiem-manual", supportUrl: "https://support.example.com/ngsiem", ownerId: "USR-002", status: "完了", priority: "中", desiredDueDate: "2026-06-12", memo: "最新UI反映済み", isManaged: true, updated: "2026/06/20 16:42", updatedBy: "田中 美咲" },
-    { id: "DOC-019", name: "Mobile FAQ", category: "その他", moduleId: "MOD-006", boxUrl: "https://box.example.com/mobile-faq", supportUrl: "https://support.example.com/mobile", ownerId: "USR-001", status: "未着手", priority: "低", desiredDueDate: "2026-08-23", memo: "iOS最新版の既知問題を追加予定", isManaged: true, updated: "2026/06/10 10:20", updatedBy: "佐藤 健" },
-    { id: "DOC-018", name: "Shield 推奨設定", category: "推奨設定", moduleId: "MOD-007", boxUrl: "https://box.example.com/shield-guide", supportUrl: "", ownerId: "USR-003", status: "保留", priority: "低", desiredDueDate: "", memo: "製品方針確定まで保留", isManaged: false, updated: "2025/05/08 13:10", updatedBy: "鈴木 彩" }
+    { id: "DOC-023", name: "FDR 導入ガイド", category: "導入手順書/インストール", moduleId: "MOD-019", boxUrl: "https://box.example.com/fdr-guide", supportUrl: "https://support.example.com/fdr", ownerId: "USR-004", status: "対応中", priority: "高", desiredDueDate: "2026-07-02", memo: "セットアップ画面の差し替え", isManaged: true, updated: "2026/06/17 09:30", updatedBy: "山本 拓也" },
+    { id: "DOC-022", name: "Cloud Security 提案テンプレート", category: "提案関係", moduleId: "MOD-013", boxUrl: "https://box.example.com/cloud-proposal", supportUrl: "https://support.example.com/cloud", ownerId: "USR-005", status: "差し戻し", priority: "低", desiredDueDate: "2026-06-20", memo: "ライセンス体系と構成図を修正", isManaged: true, updated: "2026/06/15 11:05", updatedBy: "鈴木 彩" },
+    { id: "DOC-021", name: "Identity Protection POVガイド", category: "POV/トライアルガイド", moduleId: "MOD-014", boxUrl: "https://box.example.com/identity-pov", supportUrl: "https://support.example.com/identity", ownerId: "USR-005", status: "対応中", priority: "高", desiredDueDate: "2026-06-28", memo: "検証シナリオを更新", isManaged: true, updated: "2026/06/14 16:00", updatedBy: "山本 拓也" },
+    { id: "DOC-020", name: "NG-SIEM 操作手順書", category: "操作手順書", moduleId: "MOD-017", boxUrl: "https://box.example.com/ngsiem-manual", supportUrl: "https://support.example.com/ngsiem", ownerId: "USR-002", status: "完了", priority: "中", desiredDueDate: "2026-06-12", memo: "最新UI反映済み", isManaged: true, updated: "2026/06/20 16:42", updatedBy: "田中 美咲" },
+    { id: "DOC-019", name: "Mobile FAQ", category: "その他", moduleId: "MOD-020", boxUrl: "https://box.example.com/mobile-faq", supportUrl: "https://support.example.com/mobile", ownerId: "USR-001", status: "未着手", priority: "低", desiredDueDate: "2026-08-23", memo: "iOS最新版の既知問題を追加予定", isManaged: true, updated: "2026/06/10 10:20", updatedBy: "佐藤 健" },
+    { id: "DOC-018", name: "Sheild 推奨設定", category: "推奨設定", moduleId: "MOD-015", boxUrl: "https://box.example.com/shield-guide", supportUrl: "", ownerId: "USR-003", status: "保留", priority: "低", desiredDueDate: "", memo: "製品方針確定まで保留", isManaged: false, updated: "2025/05/08 13:10", updatedBy: "鈴木 彩" }
   ],
   requests: [
     { id: "REQ-108", documentId: "DOC-024", reason: "新機能追加", content: "Charlotte AI Detection Triageを追記", attachmentUrl: "", comment: "", priority: "高", status: "レビュー待ち", ownerId: "USR-001", desiredDueDate: "2026-06-30", overdue: false },
@@ -68,15 +89,15 @@ const state = {
     { id: "REQ-104", documentId: "DOC-019", reason: "FAQ更新", content: "iOS最新版の既知問題を追加", attachmentUrl: "", comment: "", priority: "低", status: "未着手", ownerId: "USR-001", desiredDueDate: "2026-08-23", overdue: false }
   ],
   activityLogs: [
-    { documentId: "DOC-024", time: "2026/06/18 14:18", actor: "田中 美咲", action: "ステータス変更", comment: "レビューをお願いします", changeSummary: "対応中 → レビュー待ち" },
-    { documentId: "DOC-024", time: "2026/06/16 09:12", actor: "加藤 翔太", action: "更新依頼作成", comment: "新機能追加に伴う更新", changeSummary: "REQ-108を作成" },
-    { documentId: "DOC-023", time: "2026/06/17 09:30", actor: "山本 拓也", action: "ドキュメント更新", comment: "", changeSummary: "セットアップ画面の画像を更新" },
-    { documentId: "DOC-023", time: "2026/06/16 15:20", actor: "加藤 翔太", action: "担当者変更", comment: "", changeSummary: "担当者を山本 拓也に設定" },
-    { documentId: "DOC-022", time: "2026/06/17 11:05", actor: "高橋 直子", action: "コメント追加", comment: "ライセンス体系を再確認してください", changeSummary: "レビューコメントを追加" },
-    { documentId: "DOC-022", time: "2026/06/17 10:55", actor: "高橋 直子", action: "ステータス変更", comment: "", changeSummary: "レビュー待ち → 差し戻し" },
-    { documentId: "DOC-021", time: "2026/06/14 16:00", actor: "山本 拓也", action: "ドキュメント更新", comment: "", changeSummary: "推奨設定の章を更新" },
-    { documentId: "DOC-020", time: "2026/06/20 16:42", actor: "加藤 翔太", action: "完了", comment: "正式版へ反映しました", changeSummary: "ステータスを完了へ変更" },
-    { documentId: "DOC-019", time: "2026/06/10 10:20", actor: "佐藤 健", action: "更新依頼作成", comment: "", changeSummary: "iOS最新版の既知問題追加を依頼" }
+    { documentId: "DOC-024", time: "2026/06/18 14:18", actor: "田中 美咲", action: "ステータス変更", beforeValue: "対応中", afterValue: "レビュー待ち", comment: "レビューをお願いします" },
+    { documentId: "DOC-024", time: "2026/06/16 09:12", actor: "加藤 翔太", action: "更新依頼作成", beforeValue: "—", afterValue: "REQ-108を作成", comment: "新機能追加に伴う更新" },
+    { documentId: "DOC-023", time: "2026/06/17 09:30", actor: "山本 拓也", action: "ドキュメント更新", beforeValue: "旧画面", afterValue: "最新画面", comment: "セットアップ画面の画像を更新" },
+    { documentId: "DOC-023", time: "2026/06/16 15:20", actor: "加藤 翔太", action: "担当者変更", beforeValue: "未割当", afterValue: "山本 拓也", comment: "" },
+    { documentId: "DOC-022", time: "2026/06/17 11:05", actor: "高橋 直子", action: "コメント追加", beforeValue: "—", afterValue: "レビューコメント追加", comment: "ライセンス体系を再確認してください" },
+    { documentId: "DOC-022", time: "2026/06/17 10:55", actor: "高橋 直子", action: "ステータス変更", beforeValue: "レビュー待ち", afterValue: "差し戻し", comment: "" },
+    { documentId: "DOC-021", time: "2026/06/14 16:00", actor: "山本 拓也", action: "ドキュメント更新", beforeValue: "旧推奨設定", afterValue: "新推奨設定", comment: "推奨設定の章を更新" },
+    { documentId: "DOC-020", time: "2026/06/20 16:42", actor: "加藤 翔太", action: "完了", beforeValue: "レビュー待ち", afterValue: "完了", comment: "正式版へ反映しました" },
+    { documentId: "DOC-019", time: "2026/06/10 10:20", actor: "佐藤 健", action: "更新依頼作成", beforeValue: "—", afterValue: "REQ-104を作成", comment: "iOS最新版の既知問題追加を依頼" }
   ]
 };
 
@@ -175,6 +196,9 @@ function requestRows(requests) {
 function renderDashboard() {
   const count = (status) => state.documents.filter((doc) => doc.status === status).length;
   const overdue = state.requests.filter((request) => request.overdue).length;
+  const chartStatuses = ["未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留"];
+  const maxStatusCount = Math.max(1, ...chartStatuses.map(count));
+  const chartColors = ["#8a958f", "#3976a8", "#d0872d", "#bd5750", "#2d8b62", "#756493"];
   app.innerHTML = `<section class="page">${pageHeader("OVERVIEW", "おはようございます、加藤さん", "カードを選択すると対象ドキュメントへ移動します。")}
     <div class="metrics">
       ${metricCard("総ドキュメント", state.documents.length, "すべて表示", "▤", "")}
@@ -185,11 +209,10 @@ function renderDashboard() {
     <div class="dashboard-grid"><section class="panel"><div class="panel-header"><h2>優先度の高い更新依頼</h2><button class="text-button" data-navigate="requests">すべて見る →</button></div>
       <div class="request-list">${requestRows(state.requests.slice(0, 5))}</div></section>
       <div class="right-column"><section class="panel progress-panel"><div class="panel-header"><h2>ステータス別</h2></div>
-        <div class="progress-list">${["未着手", "対応中", "レビュー待ち", "完了"].map((status, index) => {
-          const colors = ["#8a958f", "#3976a8", "#d0872d", "#2d8b62"];
-          return `<button class="progress-item progress-button" data-dashboard-filter="${STATUS_QUERY[status]}"><span class="progress-item-top"><span>${status}</span><span>${count(status)}件</span></span>
-          <span class="progress-track"><span class="progress-fill" style="width:${state.documents.length ? count(status) / state.documents.length * 100 : 0}%;--bar:${colors[index]}"></span></span></button>`;
-        }).join("")}</div></section>
+        <div class="status-chart-list">${chartStatuses.map((status, index) => `<button class="status-chart-button" data-dashboard-filter="${STATUS_QUERY[status]}">
+          <span class="status-chart-label"><span>${status}</span><strong>${count(status)}</strong></span>
+          <span class="status-chart-track"><span class="status-chart-bar" style="width:${count(status) / maxStatusCount * 100}%;--bar:${chartColors[index]}"></span></span>
+        </button>`).join("")}</div></section>
         <section class="panel activity-panel"><div class="panel-header"><h2>最近のアクティビティ</h2><button class="text-button" data-navigate="history">履歴 →</button></div>
         <div class="activity-list">${state.activityLogs.slice(0, 3).map((item) => `<div class="activity-item"><span class="activity-symbol">↺</span><div><p><strong>${escapeHtml(item.actor)}</strong>：${escapeHtml(item.action)}</p><time>${item.time}</time></div></div>`).join("")}</div></section></div>
     </div></section>`;
@@ -306,9 +329,9 @@ function renderHistory() {
     <div class="toolbar"><select class="filter-select" id="historyDocumentFilter"><option>すべて</option>${state.documents.map((doc) => `<option value="${doc.id}" ${state.historyDocumentFilter === doc.id ? "selected" : ""}>${escapeHtml(doc.name)}</option>`).join("")}</select>
       <select class="filter-select" id="historyModuleFilter"><option>すべて</option>${state.modules.map((module) => `<option value="${module.id}" ${state.historyModuleFilter === module.id ? "selected" : ""}>${escapeHtml(module.name)}</option>`).join("")}</select>
       <select class="filter-select" id="historyCategoryFilter"><option>すべて</option>${state.rules.map((rule) => `<option ${state.historyCategoryFilter === rule.category ? "selected" : ""}>${escapeHtml(rule.category)}</option>`).join("")}</select></div>
-    <section class="panel table-panel"><table class="data-table history-table"><thead><tr><th>日時</th><th>ドキュメント</th><th>実行者</th><th>操作内容</th><th>コメント</th><th>変更概要</th></tr></thead>
+    <section class="panel table-panel"><table class="data-table history-table"><thead><tr><th>日時</th><th>ドキュメント</th><th>ユーザー</th><th>操作内容</th><th>変更前</th><th>変更後</th><th>コメント</th></tr></thead>
     <tbody>${logs.map((log) => { const doc = documentById(log.documentId); return `<tr><td>${log.time}</td><td class="doc-cell"><button class="document-link" data-document-id="${log.documentId}">${escapeHtml(doc?.name)}</button><span>${escapeHtml(moduleById(doc?.moduleId)?.name)} · ${escapeHtml(doc?.category)}</span></td>
-      <td>${escapeHtml(log.actor)}</td><td><span class="module-pill">${escapeHtml(log.action)}</span></td><td>${escapeHtml(log.comment || "—")}</td><td>${escapeHtml(log.changeSummary || "—")}</td></tr>`; }).join("")}</tbody></table>
+      <td>${escapeHtml(log.actor)}</td><td><span class="module-pill">${escapeHtml(log.action)}</span></td><td>${escapeHtml(log.beforeValue || "—")}</td><td>${escapeHtml(log.afterValue || log.changeSummary || "—")}</td><td>${escapeHtml(log.comment || "—")}</td></tr>`; }).join("")}</tbody></table>
       ${logs.length ? "" : '<div class="empty-state">条件に一致する履歴はありません。</div>'}</section></section>`;
   ["Document", "Module", "Category"].forEach((name) => $(`#history${name}Filter`).addEventListener("change", (event) => { state[`history${name}Filter`] = event.target.value; renderHistory(); bindCommon(); }));
 }
@@ -385,16 +408,78 @@ function openDetailPanel(documentId) {
       ${detailRow("ステータス", doc.status)}${detailRow("優先度", doc.priority)}
       ${detailRow("更新希望期限", formatDisplayDate(doc.desiredDueDate))}${detailRow("最終更新日時", doc.updated)}
       ${detailRow("最終更新者", doc.updatedBy)}
-    </dl></section><section class="detail-section"><h3>メモ</h3><p class="detail-memo">${escapeHtml(doc.memo || "メモはありません。")}</p></section>
+    </dl></section>
+    <section class="detail-section"><h3>ステータス・更新希望期限を変更</h3>
+      <form class="detail-edit-form" id="detailUpdateForm">
+        <div class="form-grid"><label>ステータス<select id="detailStatus">${["未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留"].map((status) => `<option ${doc.status === status ? "selected" : ""}>${status}</option>`).join("")}</select></label>
+        <label>更新希望期限<input id="detailDueDate" type="date" value="${escapeHtml(doc.desiredDueDate || "")}"></label></div>
+        <label>コメント（任意）<textarea id="detailChangeComment" rows="3" placeholder="変更理由や補足を入力してください"></textarea></label>
+        <div class="modal-actions"><button class="primary-button compact-button" type="submit">変更を保存</button></div>
+      </form>
+    </section>
+    <section class="detail-section"><h3>メモ</h3><p class="detail-memo">${escapeHtml(doc.memo || "メモはありません。")}</p></section>
     <section class="detail-section"><div class="section-title-row"><h3>更新タイムライン</h3><span>${logs.length}件</span></div>
       <div class="mini-timeline">${logs.length ? logs.map((log) => `<article class="mini-timeline-item"><span class="mini-timeline-dot"></span><div>
         <div class="timeline-heading"><strong>${escapeHtml(log.action)}</strong><time>${log.time}</time></div>
-        <p>${escapeHtml(log.changeSummary || "—")}</p>${log.comment ? `<p class="timeline-comment">“${escapeHtml(log.comment)}”</p>` : ""}<span>実行者：${escapeHtml(log.actor)}</span>
+        ${log.beforeValue || log.afterValue ? `<div class="audit-change"><span>${escapeHtml(log.beforeValue || "—")}</span><i>→</i><span>${escapeHtml(log.afterValue || "—")}</span></div>` : `<p>${escapeHtml(log.changeSummary || "—")}</p>`}
+        ${log.comment ? `<p class="timeline-comment">コメント：${escapeHtml(log.comment)}</p>` : ""}<span>実施ユーザー：${escapeHtml(log.actor)}</span>
       </div></article>`).join("") : '<p class="empty-timeline">履歴はまだありません。</p>'}</div></section></div>`;
   detailPanel.classList.add("open");
   detailBackdrop.classList.remove("hidden");
   document.body.classList.add("detail-open");
   $("#closeDetailPanel").addEventListener("click", closeDetailPanel);
+  $("#detailUpdateForm").addEventListener("submit", saveDetailChanges);
+}
+
+function addActivityLog(documentId, action, beforeValue, afterValue, comment = "") {
+  state.activityLogs.unshift({
+    documentId,
+    time: formatDateTime(new Date()),
+    actor: CURRENT_USER,
+    action,
+    beforeValue,
+    afterValue,
+    comment,
+    changeSummary: `${beforeValue || "—"} → ${afterValue || "—"}`
+  });
+}
+
+function saveDetailChanges(event) {
+  event.preventDefault();
+  const doc = documentById(state.selectedDocumentId);
+  if (!doc) return;
+  const nextStatus = $("#detailStatus").value;
+  const nextDueDate = $("#detailDueDate").value;
+  const comment = $("#detailChangeComment").value.trim();
+  let changed = false;
+
+  if (nextStatus !== doc.status) {
+    const oldStatus = doc.status;
+    doc.status = nextStatus;
+    addActivityLog(doc.id, nextStatus === "完了" ? "完了" : "ステータス変更", oldStatus, nextStatus, comment);
+    state.requests.filter((request) => request.documentId === doc.id).forEach((request) => { request.status = nextStatus; });
+    changed = true;
+  }
+
+  if (nextDueDate !== (doc.desiredDueDate || "")) {
+    const oldDueDate = doc.desiredDueDate || "未設定";
+    doc.desiredDueDate = nextDueDate;
+    addActivityLog(doc.id, "更新希望期限変更", formatDisplayDate(oldDueDate), formatDisplayDate(nextDueDate), comment);
+    state.requests.filter((request) => request.documentId === doc.id).forEach((request) => { request.desiredDueDate = nextDueDate; });
+    changed = true;
+  }
+
+  if (!changed && comment) {
+    addActivityLog(doc.id, "コメント追加", "—", "コメントを追加", comment);
+    changed = true;
+  }
+
+  if (!changed) return showToast("変更内容がありません", true);
+  doc.updated = formatDateTime(new Date());
+  doc.updatedBy = CURRENT_USER;
+  render();
+  openDetailPanel(doc.id);
+  showToast("変更を保存し、タイムラインへ記録しました");
 }
 
 function detailRow(label, value) {
@@ -669,7 +754,7 @@ $("#requestForm").addEventListener("submit", (event) => {
   const request = { id: nextId("REQ", state.requests), documentId: doc.id, reason: $("#requestReason").value.trim(), content: $("#requestContent").value.trim(), attachmentUrl: $("#requestAttachmentUrl").value.trim(), comment: $("#requestComment").value.trim(), priority, status: "未着手", ownerId: assignee.id, desiredDueDate: dueDate, overdue: false };
   state.requests.unshift(request);
   Object.assign(doc, { ownerId: assignee.id, priority, status: "未着手", desiredDueDate: dueDate, updated: formatDateTime(new Date()), updatedBy: "加藤 翔太" });
-  state.activityLogs.unshift({ documentId: doc.id, time: formatDateTime(new Date()), actor: "加藤 翔太", action: "更新依頼作成", comment: request.comment, changeSummary: `${request.content}／優先度${priority}／担当者${assignee.name}` });
+  addActivityLog(doc.id, "更新依頼作成", "—", `${request.content}／優先度${priority}／担当者${assignee.name}`, request.comment);
   $("#requestNavCount").textContent = state.requests.length;
   closeModal(requestModal, $("#requestForm")); showToast("更新依頼を作成しました"); render();
 });
