@@ -15,6 +15,7 @@ const state = {
   search: "",
   statusFilter: "すべて",
   moduleFilter: "すべて",
+  updatedFilter: "すべて",
   historyDocumentFilter: "すべて",
   historyModuleFilter: "すべて",
   historyCategoryFilter: "すべて",
@@ -28,13 +29,13 @@ const state = {
     { id: "USR-006", name: "高橋 直子", role: "PE", moduleIds: ["MOD-005"], isActive: false }
   ],
   modules: [
-    { id: "MOD-001", name: "Falcon", description: "Falcon Platform全般", ownerId: "USR-001", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-002", name: "FDR", description: "Falcon Data Replicator", ownerId: "USR-002", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/17" },
-    { id: "MOD-003", name: "Cloud Security", description: "クラウドセキュリティ製品群", ownerId: "USR-003", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
-    { id: "MOD-004", name: "Identity", description: "Identity Protection", ownerId: "USR-004", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
-    { id: "MOD-005", name: "NG-SIEM", description: "Next-Gen SIEM", ownerId: "USR-001", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
-    { id: "MOD-006", name: "Mobile", description: "モバイル端末保護", ownerId: "USR-002", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
-    { id: "MOD-007", name: "Shield", description: "Shield関連資料", ownerId: "USR-003", isActive: false, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" }
+    { id: "MOD-001", name: "Platform", description: "Falcon Platform全般", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-002", name: "PIO", description: "Platform Implementation & Operations", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/17" },
+    { id: "MOD-003", name: "Cloud Security", description: "クラウドセキュリティ製品群", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
+    { id: "MOD-004", name: "ITP/ITD", description: "Identity Threat Protection / Detection", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
+    { id: "MOD-005", name: "NG-SIEM", description: "Next-Gen SIEM", isActive: true, isImportant: true, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-006", name: "Mobile", description: "モバイル端末保護", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
+    { id: "MOD-007", name: "Shield", description: "Shield関連資料", isActive: false, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" }
   ],
   rules: [
     { id: "RULE-001", category: "製品紹介資料", roles: ["SE"], isImportant: true },
@@ -57,7 +58,7 @@ const state = {
     { id: "DOC-021", name: "Identity Protection POVガイド", category: "POV/トライアルガイド", moduleId: "MOD-004", boxUrl: "https://box.example.com/identity-pov", supportUrl: "https://support.example.com/identity", ownerId: "USR-005", status: "対応中", priority: "高", desiredDueDate: "2026-06-28", memo: "検証シナリオを更新", isManaged: true, updated: "2026/06/14 16:00", updatedBy: "山本 拓也" },
     { id: "DOC-020", name: "NG-SIEM 操作手順書", category: "操作手順書", moduleId: "MOD-005", boxUrl: "https://box.example.com/ngsiem-manual", supportUrl: "https://support.example.com/ngsiem", ownerId: "USR-002", status: "完了", priority: "中", desiredDueDate: "2026-06-12", memo: "最新UI反映済み", isManaged: true, updated: "2026/06/20 16:42", updatedBy: "田中 美咲" },
     { id: "DOC-019", name: "Mobile FAQ", category: "その他", moduleId: "MOD-006", boxUrl: "https://box.example.com/mobile-faq", supportUrl: "https://support.example.com/mobile", ownerId: "USR-001", status: "未着手", priority: "低", desiredDueDate: "2026-08-23", memo: "iOS最新版の既知問題を追加予定", isManaged: true, updated: "2026/06/10 10:20", updatedBy: "佐藤 健" },
-    { id: "DOC-018", name: "Shield 推奨設定", category: "推奨設定", moduleId: "MOD-007", boxUrl: "https://box.example.com/shield-guide", supportUrl: "", ownerId: "USR-003", status: "保留", priority: "低", desiredDueDate: "", memo: "製品方針確定まで保留", isManaged: false, updated: "2026/06/08 13:10", updatedBy: "鈴木 彩" }
+    { id: "DOC-018", name: "Shield 推奨設定", category: "推奨設定", moduleId: "MOD-007", boxUrl: "https://box.example.com/shield-guide", supportUrl: "", ownerId: "USR-003", status: "保留", priority: "低", desiredDueDate: "", memo: "製品方針確定まで保留", isManaged: false, updated: "2025/05/08 13:10", updatedBy: "鈴木 彩" }
   ],
   requests: [
     { id: "REQ-108", documentId: "DOC-024", reason: "新機能追加", content: "Charlotte AI Detection Triageを追記", attachmentUrl: "", comment: "", priority: "高", status: "レビュー待ち", ownerId: "USR-001", desiredDueDate: "2026-06-30", overdue: false },
@@ -144,6 +145,14 @@ function documentManagementRoles(doc) {
   return ruleByCategory(doc.category)?.roles.join("、") || "未設定";
 }
 
+function applyMasterRules() {
+  state.documents.forEach((doc) => {
+    doc.priority = calculatePriority(doc);
+    const assignee = autoAssign(doc);
+    if (assignee) doc.ownerId = assignee.id;
+  });
+}
+
 function metricCard(label, value, note, icon, filter, accent = "var(--green)", soft = "var(--green-soft)") {
   return `<button class="metric-card metric-button" data-dashboard-filter="${escapeHtml(filter)}" style="--accent:${accent};--accent-soft:${soft}">
     <span class="metric-top"><span>${label}</span><span class="metric-icon">${icon}</span></span>
@@ -193,8 +202,19 @@ function filteredDocuments() {
     const owner = memberById(doc.ownerId)?.name || "";
     const searchable = [doc.name, doc.category, module, owner, doc.id].some((value) => value.toLowerCase().includes(query));
     const statusMatch = state.statusFilter === "すべて" || doc.status === state.statusFilter || (state.statusFilter === "期限超過" && state.requests.some((request) => request.documentId === doc.id && request.overdue));
-    return searchable && statusMatch && (state.moduleFilter === "すべて" || doc.moduleId === state.moduleFilter);
+    return searchable && statusMatch && (state.moduleFilter === "すべて" || doc.moduleId === state.moduleFilter) && matchesUpdatedFilter(doc);
   });
+}
+
+function matchesUpdatedFilter(doc) {
+  if (state.updatedFilter === "すべて") return true;
+  const updatedAt = new Date(`${doc.updated.split(" ")[0].replaceAll("/", "-")}T00:00:00`);
+  const ageDays = (new Date() - updatedAt) / 86400000;
+  if (state.updatedFilter === "1m") return ageDays <= 31;
+  if (state.updatedFilter === "3m") return ageDays <= 93;
+  if (state.updatedFilter === "6m") return ageDays <= 186;
+  if (state.updatedFilter === "1y_stale") return ageDays >= 365;
+  return true;
 }
 
 function renderDocuments() {
@@ -204,11 +224,12 @@ function renderDocuments() {
     <div class="toolbar"><input class="filter-input" id="documentSearch" type="search" placeholder="資料名、担当者で検索..." value="${escapeHtml(state.search)}">
       <select class="filter-select" id="statusFilter">${["すべて", "未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留", "期限超過"].map((item) => `<option ${state.statusFilter === item ? "selected" : ""}>${item}</option>`).join("")}</select>
       <select class="filter-select" id="moduleFilter"><option>すべて</option>${state.modules.map((module) => `<option value="${module.id}" ${state.moduleFilter === module.id ? "selected" : ""}>${escapeHtml(module.name)}</option>`).join("")}</select>
+      <select class="filter-select" id="updatedFilter"><option value="すべて">最終更新日：すべて</option><option value="1m" ${state.updatedFilter === "1m" ? "selected" : ""}>1ヶ月以内</option><option value="3m" ${state.updatedFilter === "3m" ? "selected" : ""}>3ヶ月以内</option><option value="6m" ${state.updatedFilter === "6m" ? "selected" : ""}>6ヶ月以内</option><option value="1y_stale" ${state.updatedFilter === "1y_stale" ? "selected" : ""}>1年以上更新なし</option></select>
     </div>
-    <section class="panel table-panel"><table class="data-table"><thead><tr><th>ドキュメント</th><th>モジュール</th><th>担当者</th><th>優先度</th><th>ステータス</th><th>更新希望期限</th></tr></thead>
+    <section class="panel table-panel"><table class="data-table"><thead><tr><th>ドキュメント</th><th>モジュール</th><th>担当者</th><th>優先度</th><th>ステータス</th><th>更新希望期限</th><th>最終更新日</th></tr></thead>
     <tbody>${docs.map((doc) => `<tr class="${state.selectedDocumentId === doc.id ? "selected-row" : ""}"><td class="doc-cell"><button class="document-link" data-document-id="${doc.id}">${escapeHtml(doc.name)}</button><span>${doc.id} · ${escapeHtml(doc.category)}</span></td>
       <td><span class="module-pill">${escapeHtml(moduleById(doc.moduleId)?.name)}</span></td><td><div class="owner-cell">${avatar(doc.ownerId)}${escapeHtml(memberById(doc.ownerId)?.name || "未割当")}</div></td>
-      <td>${priorityBadge(doc.priority)}</td><td>${statusBadge(doc.status)}</td><td>${formatDisplayDate(doc.desiredDueDate)}</td></tr>`).join("")}</tbody></table>
+      <td>${priorityBadge(doc.priority)}</td><td>${statusBadge(doc.status)}</td><td>${formatDisplayDate(doc.desiredDueDate)}</td><td>${escapeHtml(doc.updated.split(" ")[0])}</td></tr>`).join("")}</tbody></table>
       ${docs.length ? "" : '<div class="empty-state">条件に一致するドキュメントはありません。</div>'}</section></section>`;
   bindDocumentFilters();
   $("#importDocuments").addEventListener("click", () => $("#documentCsvInput").click());
@@ -247,9 +268,9 @@ function renderMembers() {
 
 function renderModules() {
   app.innerHTML = `<section class="page">${pageHeader("MODULE MASTER", "モジュール管理", "重要モジュールは優先度の自動計算に利用されます。", '<button class="primary-button compact-button" id="addModule">＋ モジュール追加</button>')}
-    <section class="panel table-panel"><table class="data-table"><thead><tr><th>モジュール</th><th>説明</th><th>オーナー</th><th>重要</th><th>状態</th><th></th></tr></thead>
+    <section class="panel table-panel"><table class="data-table"><thead><tr><th>モジュール</th><th>説明</th><th>重要モジュール</th><th>状態</th><th></th></tr></thead>
     <tbody>${state.modules.map((module) => `<tr><td class="doc-cell"><strong>${escapeHtml(module.name)}</strong><span>${module.id}</span></td><td>${escapeHtml(module.description || "—")}</td>
-      <td>${escapeHtml(memberById(module.ownerId)?.name || "未設定")}</td><td><span class="important-badge ${module.isImportant ? "important" : ""}">${module.isImportant ? "重要" : "通常"}</span></td>
+      <td><span class="important-badge ${module.isImportant ? "important" : ""}">${module.isImportant ? "重要" : "通常"}</span></td>
       <td><button class="toggle-button ${module.isActive ? "on" : ""}" data-toggle-module="${module.id}"><span></span>${module.isActive ? "有効" : "無効"}</button></td>
       <td><div class="row-actions"><button class="text-button" data-edit-module="${module.id}">編集</button><button class="danger-button" data-delete-module="${module.id}">削除</button></div></td></tr>`).join("")}</tbody></table></section></section>`;
   $("#addModule").addEventListener("click", () => openModuleModal());
@@ -259,7 +280,7 @@ function renderModules() {
 }
 
 function renderRules() {
-  app.innerHTML = `<section class="page">${pageHeader("OPERATION RULES", "運用ルール管理", "ドキュメント種別ごとの管理ロールと重要度を定義します。", '<button class="primary-button compact-button" id="addRule">＋ ルール追加</button>')}
+  app.innerHTML = `<section class="page">${pageHeader("DOCUMENT TYPES", "ドキュメント種別管理", "種別ごとの管理ロールと重要度を定義し、優先度・期限・担当者判定へ反映します。", '<button class="primary-button compact-button" id="addRule">＋ 種別追加</button>')}
     <section class="panel table-panel"><table class="data-table"><thead><tr><th>ドキュメント種別</th><th>管理ロール</th><th>重要ドキュメント</th><th></th></tr></thead>
     <tbody>${state.rules.map((rule) => `<tr><td class="doc-cell"><strong>${escapeHtml(rule.category)}</strong><span>${rule.id}</span></td>
       <td><div class="tag-list">${rule.roles.map((role) => `<span>${role}</span>`).join("")}</div></td>
@@ -347,6 +368,7 @@ function bindDocumentFilters() {
     renderDocuments(); bindCommon();
   });
   $("#moduleFilter").addEventListener("change", (event) => { state.moduleFilter = event.target.value; renderDocuments(); bindCommon(); });
+  $("#updatedFilter").addEventListener("change", (event) => { state.updatedFilter = event.target.value; renderDocuments(); bindCommon(); });
 }
 
 function openDetailPanel(documentId) {
@@ -419,14 +441,21 @@ function selectedValues(select) {
   return [...select.selectedOptions].map((option) => option.value);
 }
 
+function selectedModuleIds() {
+  return $$("#memberModules input:checked").map((input) => input.value);
+}
+
 function openMemberModal(id = "") {
   const member = memberById(id);
   $("#memberModalTitle").textContent = member ? "ユーザーを編集" : "ユーザーを追加";
   $("#memberEditId").value = member?.id || "";
   $("#memberName").value = member?.name || "";
   $("#memberRole").value = member?.role || "SE";
-  $("#memberModules").innerHTML = state.modules.filter((module) => module.isActive).map((module) => `<option value="${module.id}">${escapeHtml(module.name)}</option>`).join("");
-  fillMultiSelect($("#memberModules"), member?.moduleIds || []);
+  const selected = member?.moduleIds || [];
+  $("#memberModules").innerHTML = state.modules.filter((module) => module.isActive).map((module) => `<label class="module-check-item ${selected.includes(module.id) ? "selected" : ""}">
+    <input type="checkbox" value="${module.id}" ${selected.includes(module.id) ? "checked" : ""}><span>${escapeHtml(module.name)}</span>
+  </label>`).join("");
+  $$("#memberModules input").forEach((input) => input.addEventListener("change", () => input.closest(".module-check-item").classList.toggle("selected", input.checked)));
   $("#memberActive").checked = member?.isActive ?? true;
   memberModal.classList.remove("hidden");
 }
@@ -437,8 +466,6 @@ function openModuleModal(id = "") {
   $("#moduleEditId").value = module?.id || "";
   $("#moduleName").value = module?.name || "";
   $("#moduleDescription").value = module?.description || "";
-  $("#moduleOwner").innerHTML = state.members.filter((member) => member.isActive).map((member) => `<option value="${member.id}">${escapeHtml(member.name)} (${member.role})</option>`).join("");
-  $("#moduleOwner").value = module?.ownerId || state.members.find((member) => member.isActive)?.id;
   $("#moduleActive").checked = module?.isActive ?? true;
   $("#moduleImportant").checked = module?.isImportant ?? false;
   moduleModal.classList.remove("hidden");
@@ -446,7 +473,7 @@ function openModuleModal(id = "") {
 
 function openRuleModal(id = "") {
   const rule = state.rules.find((item) => item.id === id);
-  $("#ruleModalTitle").textContent = rule ? "運用ルールを編集" : "運用ルールを追加";
+  $("#ruleModalTitle").textContent = rule ? "ドキュメント種別を編集" : "ドキュメント種別を追加";
   $("#ruleEditId").value = rule?.id || "";
   $("#ruleCategory").value = rule?.category || "";
   fillMultiSelect($("#ruleRoles"), rule?.roles || []);
@@ -455,7 +482,7 @@ function openRuleModal(id = "") {
 }
 
 function toggleMember(id) {
-  const member = memberById(id); member.isActive = !member.isActive; renderMembers(); showToast(`${member.name}を${member.isActive ? "有効" : "無効"}にしました`);
+  const member = memberById(id); member.isActive = !member.isActive; applyMasterRules(); renderMembers(); showToast(`${member.name}を${member.isActive ? "有効" : "無効"}にしました`);
 }
 
 function toggleModule(id) {
@@ -524,7 +551,7 @@ async function importMembers(file) {
       if (existing) { Object.assign(existing, data); updated += 1; }
       else { state.members.push({ id: nextId("USR", state.members), ...data }); added += 1; }
     });
-    renderMembers(); showToast(`${added}件追加、${updated}件更新しました`);
+    applyMasterRules(); renderMembers(); showToast(`${added}件追加、${updated}件更新しました`);
   } catch (error) { showToast(`CSV取込エラー: ${error.message}`, true); }
 }
 
@@ -604,9 +631,10 @@ $("#documentCsvInput").addEventListener("change", async (event) => { if (event.t
 $("#memberForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const id = $("#memberEditId").value; const existing = memberById(id);
-  const data = { name: $("#memberName").value.trim(), role: $("#memberRole").value, moduleIds: selectedValues($("#memberModules")), isActive: $("#memberActive").checked };
+  const data = { name: $("#memberName").value.trim(), role: $("#memberRole").value, moduleIds: selectedModuleIds(), isActive: $("#memberActive").checked };
   if (!data.moduleIds.length) return showToast("担当モジュールを選択してください", true);
   if (existing) Object.assign(existing, data); else state.members.push({ id: nextId("USR", state.members), ...data });
+  applyMasterRules();
   closeModal(memberModal, $("#memberForm")); renderMembers(); showToast(existing ? "ユーザーを更新しました" : "ユーザーを追加しました");
 });
 
@@ -614,9 +642,9 @@ $("#moduleForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const id = $("#moduleEditId").value; const existing = moduleById(id); const name = $("#moduleName").value.trim();
   if (state.modules.some((module) => module.name === name && module.id !== id)) return showToast("同名のモジュールがあります", true);
-  const data = { name, description: $("#moduleDescription").value.trim(), ownerId: $("#moduleOwner").value, isActive: $("#moduleActive").checked, isImportant: $("#moduleImportant").checked, updatedAt: formatDisplayDate(formatDate(new Date())) };
+  const data = { name, description: $("#moduleDescription").value.trim(), isActive: $("#moduleActive").checked, isImportant: $("#moduleImportant").checked, updatedAt: formatDisplayDate(formatDate(new Date())) };
   if (existing) Object.assign(existing, data); else state.modules.push({ id: nextId("MOD", state.modules), ...data, createdAt: formatDisplayDate(formatDate(new Date())) });
-  state.documents.forEach((doc) => { doc.priority = calculatePriority(doc); });
+  applyMasterRules();
   closeModal(moduleModal, $("#moduleForm")); renderModules(); showToast(existing ? "モジュールを更新しました" : "モジュールを追加しました");
 });
 
@@ -628,8 +656,8 @@ $("#ruleForm").addEventListener("submit", (event) => {
   if (!data.roles.length) return showToast("管理ロールを選択してください", true);
   if (existing) { const old = existing.category; Object.assign(existing, data); state.documents.forEach((doc) => { if (doc.category === old) doc.category = category; }); }
   else state.rules.push({ id: nextId("RULE", state.rules), ...data });
-  state.documents.forEach((doc) => { doc.priority = calculatePriority(doc); });
-  closeModal(ruleModal, $("#ruleForm")); renderRules(); showToast(existing ? "運用ルールを更新しました" : "運用ルールを追加しました");
+  applyMasterRules();
+  closeModal(ruleModal, $("#ruleForm")); renderRules(); showToast(existing ? "ドキュメント種別を更新しました" : "ドキュメント種別を追加しました");
 });
 
 $("#requestForm").addEventListener("submit", (event) => {

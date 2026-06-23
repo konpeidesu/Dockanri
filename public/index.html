@@ -44,7 +44,7 @@
           <p>管理</p>
           <button class="nav-item muted" data-page="members"><span class="nav-icon">♙</span><span>ユーザー管理</span></button>
           <button class="nav-item muted" data-page="modules"><span class="nav-icon">◇</span><span>モジュール管理</span></button>
-          <button class="nav-item muted" data-page="rules"><span class="nav-icon">☷</span><span>運用ルール管理</span></button>
+          <button class="nav-item muted" data-page="rules"><span class="nav-icon">☷</span><span>ドキュメント種別管理</span></button>
           <button class="nav-item muted" data-page="settings"><span class="nav-icon">⚙</span><span>設定</span></button>
         </div>
 
@@ -141,9 +141,6 @@
           <label>説明
             <textarea id="moduleDescription" rows="3" placeholder="対象製品や管理範囲"></textarea>
           </label>
-          <label>オーナー
-            <select id="moduleOwner" required></select>
-          </label>
           <label class="checkbox-label">
             <input id="moduleActive" type="checkbox" checked />
             有効なモジュールとして登録
@@ -173,8 +170,8 @@
             <select id="memberRole" required><option>SE</option><option>PE</option><option>PSE</option><option>CSM</option></select>
           </label>
           <label>担当モジュール
-            <select id="memberModules" multiple required></select>
-            <span class="field-hint">Ctrl / Cmdキーを押しながら複数選択できます。</span>
+            <div class="module-checklist" id="memberModules"></div>
+            <span class="field-hint">クリックして複数のモジュールを選択できます。</span>
           </label>
           <label class="checkbox-label"><input id="memberActive" type="checkbox" checked />有効なユーザー</label>
           <div class="modal-actions">
@@ -188,7 +185,7 @@
     <div class="modal-backdrop hidden" id="ruleModal">
       <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="ruleModalTitle">
         <div class="modal-header">
-          <div><p class="eyebrow">OPERATION RULE</p><h2 id="ruleModalTitle">運用ルールを追加</h2></div>
+          <div><p class="eyebrow">DOCUMENT TYPE</p><h2 id="ruleModalTitle">ドキュメント種別を追加</h2></div>
           <button class="modal-close" id="closeRuleModal" aria-label="閉じる">×</button>
         </div>
         <form id="ruleForm">

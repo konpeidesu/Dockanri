@@ -228,6 +228,12 @@ h3 { font-size: 15px; }
 .important-badge { display: inline-flex; padding: 4px 9px; border-radius: 12px; color: #747f79; background: #eff1f0; font-size: 10px; font-weight: 700; }
 .important-badge.important { color: #a85912; background: #fff0d8; }
 .field-hint { color: var(--muted); font-size: 9px; font-weight: 400; }
+.module-checklist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 9px; border: 1px solid #dce3df; border-radius: 8px; background: #fbfcfb; }
+.module-check-item { display: flex; grid-template-columns: none; align-items: center; gap: 8px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 7px; color: #536159; background: white; cursor: pointer; transition: .16s ease; }
+.module-check-item:hover { border-color: #9fc7b2; }
+.module-check-item.selected { color: var(--green); border-color: #76ad91; background: var(--green-soft); box-shadow: inset 0 0 0 1px #b9d8c8; }
+.module-check-item input { width: 16px; height: 16px; margin: 0; accent-color: var(--green); }
+.module-check-item span { font-size: 10px; font-weight: 600; }
 .auto-assignment-preview { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px; border: 1px solid #cfe3d8; border-radius: 8px; color: #355548; background: #f2f8f5; font-size: 10px; }
 .auto-assignment-preview strong { width: 100%; color: var(--green); }
 .auto-assignment-preview span { padding-right: 9px; border-right: 1px solid #cedbd4; }
