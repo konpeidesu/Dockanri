@@ -44,6 +44,7 @@
           <p>管理</p>
           <button class="nav-item muted" data-page="members"><span class="nav-icon">♙</span><span>ユーザー管理</span></button>
           <button class="nav-item muted" data-page="modules"><span class="nav-icon">◇</span><span>モジュール管理</span></button>
+          <button class="nav-item muted" data-page="rules"><span class="nav-icon">☷</span><span>運用ルール管理</span></button>
           <button class="nav-item muted" data-page="settings"><span class="nav-icon">⚙</span><span>設定</span></button>
         </div>
 
@@ -92,26 +93,23 @@
             <select id="requestDocument" required></select>
           </label>
           <label>更新理由
-            <textarea id="requestReason" rows="4" placeholder="更新が必要になった背景や変更内容を入力してください" required></textarea>
+            <textarea id="requestReason" rows="3" placeholder="更新が必要になった背景を入力してください" required></textarea>
+          </label>
+          <label>更新内容
+            <textarea id="requestContent" rows="3" placeholder="予定している変更内容を入力してください" required></textarea>
           </label>
           <div class="form-grid">
-            <label>優先度
-              <select id="requestPriority">
-                <option>高</option><option selected>中</option><option>低</option>
-              </select>
+            <label>更新希望期限（任意）
+              <input id="requestDeadline" type="date" />
             </label>
-            <label>更新期限
-              <input id="requestDeadline" type="date" required />
+            <label>添付URL
+              <input id="requestAttachmentUrl" type="url" placeholder="https://..." />
             </label>
           </div>
-          <div class="form-grid">
-            <label>担当者
-              <select id="requestOwner"><option>田中 美咲</option><option>佐藤 健</option><option>鈴木 彩</option><option>山本 拓也</option></select>
-            </label>
-            <label>レビュー担当者
-              <select id="requestReviewer"><option>加藤 翔太</option><option>高橋 直子</option><option>伊藤 誠</option></select>
-            </label>
-          </div>
+          <label>コメント
+            <textarea id="requestComment" rows="2" placeholder="担当者への補足事項"></textarea>
+          </label>
+          <div class="auto-assignment-preview" id="requestAutoPreview"></div>
           <div class="modal-actions">
             <button type="button" class="secondary-button" id="cancelModal">キャンセル</button>
             <button type="submit" class="primary-button">更新依頼を作成</button>
@@ -150,8 +148,59 @@
             <input id="moduleActive" type="checkbox" checked />
             有効なモジュールとして登録
           </label>
+          <label class="checkbox-label">
+            <input id="moduleImportant" type="checkbox" />
+            重要モジュール
+          </label>
           <div class="modal-actions">
             <button type="button" class="secondary-button" id="cancelModuleModal">キャンセル</button>
+            <button type="submit" class="primary-button">保存</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop hidden" id="memberModal">
+      <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="memberModalTitle">
+        <div class="modal-header">
+          <div><p class="eyebrow">USER MASTER</p><h2 id="memberModalTitle">ユーザーを追加</h2></div>
+          <button class="modal-close" id="closeMemberModal" aria-label="閉じる">×</button>
+        </div>
+        <form id="memberForm">
+          <input id="memberEditId" type="hidden" />
+          <label>ユーザー名<input id="memberName" required maxlength="100" /></label>
+          <label>ロール
+            <select id="memberRole" required><option>SE</option><option>PE</option><option>PSE</option><option>CSM</option></select>
+          </label>
+          <label>担当モジュール
+            <select id="memberModules" multiple required></select>
+            <span class="field-hint">Ctrl / Cmdキーを押しながら複数選択できます。</span>
+          </label>
+          <label class="checkbox-label"><input id="memberActive" type="checkbox" checked />有効なユーザー</label>
+          <div class="modal-actions">
+            <button type="button" class="secondary-button" id="cancelMemberModal">キャンセル</button>
+            <button type="submit" class="primary-button">保存</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop hidden" id="ruleModal">
+      <section class="modal modal-small" role="dialog" aria-modal="true" aria-labelledby="ruleModalTitle">
+        <div class="modal-header">
+          <div><p class="eyebrow">OPERATION RULE</p><h2 id="ruleModalTitle">運用ルールを追加</h2></div>
+          <button class="modal-close" id="closeRuleModal" aria-label="閉じる">×</button>
+        </div>
+        <form id="ruleForm">
+          <input id="ruleEditId" type="hidden" />
+          <label>ドキュメント種別<input id="ruleCategory" required maxlength="100" /></label>
+          <label>管理ロール
+            <select id="ruleRoles" multiple required><option>SE</option><option>PE</option><option>PSE</option><option>CSM</option></select>
+            <span class="field-hint">複数ロールを選択できます。</span>
+          </label>
+          <label class="checkbox-label"><input id="ruleImportant" type="checkbox" />重要ドキュメント</label>
+          <div class="modal-actions">
+            <button type="button" class="secondary-button" id="cancelRuleModal">キャンセル</button>
             <button type="submit" class="primary-button">保存</button>
           </div>
         </form>
