@@ -2,8 +2,6 @@ const ROLES = ["SE", "PE", "PSE", "CSM"];
 const STATUS_QUERY = {
   "未着手": "not_started",
   "対応中": "in_progress",
-  "レビュー待ち": "review_requested",
-  "差し戻し": "changes_requested",
   "完了": "completed",
   "保留": "on_hold"
 };
@@ -30,33 +28,33 @@ const state = {
     { id: "USR-006", name: "高橋 直子", role: "PE", moduleIds: ["MOD-017", "MOD-018"], isActive: false }
   ],
   modules: [
-    { id: "MOD-001", name: "Platform", description: "Falcon Platform全般", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-002", name: "Multi-CID (Flight Control)", description: "マルチテナント管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-003", name: "Prevent,Insight", description: "防御・検知機能", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-004", name: "OverWatch", description: "脅威ハンティング", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-005", name: "Complete", description: "マネージドサービス", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-006", name: "DataProtection", description: "データ保護", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-007", name: "DeviceControl", description: "デバイス制御", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-008", name: "Firewall Management", description: "ファイアウォール管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-009", name: "ExposureManagement", description: "エクスポージャー管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-010", name: "Discover", description: "IT資産可視化", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-011", name: "Spotlight", description: "脆弱性管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-012", name: "Surface", description: "外部攻撃対象領域管理", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
-    { id: "MOD-013", name: "Cloud Security", description: "クラウドセキュリティ製品群", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
-    { id: "MOD-014", name: "ITP/ITD", description: "Identity Threat Protection / Detection", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
-    { id: "MOD-015", name: "Sheild", description: "Sheild関連資料", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
-    { id: "MOD-016", name: "Privileged access", description: "特権アクセス管理", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
-    { id: "MOD-017", name: "NG-SIEM", description: "Next-Gen SIEM", isActive: true, isImportant: true, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
-    { id: "MOD-018", name: "Logscale/LTR", description: "ログ管理・長期保管", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
-    { id: "MOD-019", name: "FDR", description: "Falcon Data Replicator", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
-    { id: "MOD-020", name: "Mobile", description: "モバイル端末保護", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
-    { id: "MOD-021", name: "ForIT", description: "IT運用向け機能", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-022", name: "Charlotte AI", description: "生成AI支援機能", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-023", name: "Intelligence", description: "脅威インテリジェンス", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-024", name: "FileVantage", description: "ファイル整合性監視", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-025", name: "Foundry", description: "アプリケーション開発基盤", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-026", name: "CloudTranslator", description: "クラウド設定変換", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
-    { id: "MOD-027", name: "AIDR", description: "AI Detection and Response", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" }
+    { id: "MOD-001", name: "Platform", isActive: true, isImportant: true, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-002", name: "Multi-CID (Flight Control)", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-003", name: "Prevent,Insight", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-004", name: "OverWatch", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-005", name: "Complete", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-006", name: "DataProtection", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-007", name: "DeviceControl", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-008", name: "Firewall Management", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-009", name: "ExposureManagement", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-010", name: "Discover", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-011", name: "Spotlight", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-012", name: "Surface", isActive: true, isImportant: false, createdAt: "2026/04/01", updatedAt: "2026/06/18" },
+    { id: "MOD-013", name: "Cloud Security", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/15" },
+    { id: "MOD-014", name: "ITP/ITD", isActive: true, isImportant: true, createdAt: "2026/04/02", updatedAt: "2026/06/14" },
+    { id: "MOD-015", name: "Sheild", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
+    { id: "MOD-016", name: "Privileged access", isActive: true, isImportant: false, createdAt: "2026/04/04", updatedAt: "2026/06/08" },
+    { id: "MOD-017", name: "NG-SIEM", isActive: true, isImportant: true, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-018", name: "Logscale/LTR", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-019", name: "FDR", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/12" },
+    { id: "MOD-020", name: "Mobile", isActive: true, isImportant: false, createdAt: "2026/04/03", updatedAt: "2026/06/10" },
+    { id: "MOD-021", name: "ForIT", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-022", name: "Charlotte AI", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-023", name: "Intelligence", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-024", name: "FileVantage", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-025", name: "Foundry", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-026", name: "CloudTranslator", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" },
+    { id: "MOD-027", name: "AIDR", isActive: true, isImportant: false, createdAt: "2026/04/05", updatedAt: "2026/06/10" }
   ],
   rules: [
     { id: "RULE-001", category: "製品紹介資料", roles: ["SE"], isImportant: true },
@@ -73,30 +71,30 @@ const state = {
     { id: "RULE-012", category: "その他", roles: ["SE"], isImportant: false }
   ],
   documents: [
-    { id: "DOC-024", name: "Falcon Platform 製品紹介資料", category: "製品紹介資料", moduleId: "MOD-001", boxUrl: "https://box.example.com/falcon-intro", supportUrl: "https://support.example.com/falcon", ownerId: "USR-001", status: "レビュー待ち", priority: "高", desiredDueDate: "2026-06-30", memo: "Charlotte AIの新機能を追記", isManaged: true, updated: "2026/06/18 14:18", updatedBy: "田中 美咲" },
+    { id: "DOC-024", name: "Falcon Platform 製品紹介資料", category: "製品紹介資料", moduleId: "MOD-001", boxUrl: "https://box.example.com/falcon-intro", supportUrl: "https://support.example.com/falcon", ownerId: "USR-001", status: "対応中", priority: "高", desiredDueDate: "2026-06-30", memo: "Charlotte AIの新機能を追記", isManaged: true, updated: "2026/06/18 14:18", updatedBy: "田中 美咲" },
     { id: "DOC-023", name: "FDR 導入ガイド", category: "導入手順書/インストール", moduleId: "MOD-019", boxUrl: "https://box.example.com/fdr-guide", supportUrl: "https://support.example.com/fdr", ownerId: "USR-004", status: "対応中", priority: "高", desiredDueDate: "2026-07-02", memo: "セットアップ画面の差し替え", isManaged: true, updated: "2026/06/17 09:30", updatedBy: "山本 拓也" },
-    { id: "DOC-022", name: "Cloud Security 提案テンプレート", category: "提案関係", moduleId: "MOD-013", boxUrl: "https://box.example.com/cloud-proposal", supportUrl: "https://support.example.com/cloud", ownerId: "USR-005", status: "差し戻し", priority: "低", desiredDueDate: "2026-06-20", memo: "ライセンス体系と構成図を修正", isManaged: true, updated: "2026/06/15 11:05", updatedBy: "鈴木 彩" },
+    { id: "DOC-022", name: "Cloud Security 提案テンプレート", category: "提案関係", moduleId: "MOD-013", boxUrl: "https://box.example.com/cloud-proposal", supportUrl: "https://support.example.com/cloud", ownerId: "USR-005", status: "未着手", priority: "低", desiredDueDate: "2026-06-20", memo: "ライセンス体系と構成図を修正", isManaged: true, updated: "2026/06/15 11:05", updatedBy: "鈴木 彩" },
     { id: "DOC-021", name: "Identity Protection POVガイド", category: "POV/トライアルガイド", moduleId: "MOD-014", boxUrl: "https://box.example.com/identity-pov", supportUrl: "https://support.example.com/identity", ownerId: "USR-005", status: "対応中", priority: "高", desiredDueDate: "2026-06-28", memo: "検証シナリオを更新", isManaged: true, updated: "2026/06/14 16:00", updatedBy: "山本 拓也" },
     { id: "DOC-020", name: "NG-SIEM 操作手順書", category: "操作手順書", moduleId: "MOD-017", boxUrl: "https://box.example.com/ngsiem-manual", supportUrl: "https://support.example.com/ngsiem", ownerId: "USR-002", status: "完了", priority: "中", desiredDueDate: "2026-06-12", memo: "最新UI反映済み", isManaged: true, updated: "2026/06/20 16:42", updatedBy: "田中 美咲" },
     { id: "DOC-019", name: "Mobile FAQ", category: "その他", moduleId: "MOD-020", boxUrl: "https://box.example.com/mobile-faq", supportUrl: "https://support.example.com/mobile", ownerId: "USR-001", status: "未着手", priority: "低", desiredDueDate: "2026-08-23", memo: "iOS最新版の既知問題を追加予定", isManaged: true, updated: "2026/06/10 10:20", updatedBy: "佐藤 健" },
     { id: "DOC-018", name: "Sheild 推奨設定", category: "推奨設定", moduleId: "MOD-015", boxUrl: "https://box.example.com/shield-guide", supportUrl: "", ownerId: "USR-003", status: "保留", priority: "低", desiredDueDate: "", memo: "製品方針確定まで保留", isManaged: false, updated: "2025/05/08 13:10", updatedBy: "鈴木 彩" }
   ],
   requests: [
-    { id: "REQ-108", documentId: "DOC-024", reason: "新機能追加", content: "Charlotte AI Detection Triageを追記", attachmentUrl: "", comment: "", priority: "高", status: "レビュー待ち", ownerId: "USR-001", desiredDueDate: "2026-06-30", overdue: false },
-    { id: "REQ-107", documentId: "DOC-023", reason: "UI変更", content: "セットアップ画面を更新", attachmentUrl: "", comment: "", priority: "高", status: "対応中", ownerId: "USR-004", desiredDueDate: "2026-07-02", overdue: false },
-    { id: "REQ-106", documentId: "DOC-022", reason: "レビュー指摘", content: "指摘3点を修正", attachmentUrl: "", comment: "", priority: "低", status: "差し戻し", ownerId: "USR-005", desiredDueDate: "2026-06-20", overdue: true },
-    { id: "REQ-105", documentId: "DOC-021", reason: "検証シナリオ更新", content: "推奨設定を更新", attachmentUrl: "", comment: "", priority: "高", status: "対応中", ownerId: "USR-005", desiredDueDate: "2026-06-28", overdue: false },
-    { id: "REQ-104", documentId: "DOC-019", reason: "FAQ更新", content: "iOS最新版の既知問題を追加", attachmentUrl: "", comment: "", priority: "低", status: "未着手", ownerId: "USR-001", desiredDueDate: "2026-08-23", overdue: false }
+    { id: "REQ-108", documentId: "DOC-024", reason: "新機能追加", content: "Charlotte AI Detection Triageを追記", attachmentUrl: "", comment: "", priority: "高", status: "対応中", ownerId: "USR-001", desiredDueDate: "2026-06-30" },
+    { id: "REQ-107", documentId: "DOC-023", reason: "UI変更", content: "セットアップ画面を更新", attachmentUrl: "", comment: "", priority: "高", status: "対応中", ownerId: "USR-004", desiredDueDate: "2026-07-02" },
+    { id: "REQ-106", documentId: "DOC-022", reason: "レビュー指摘", content: "指摘3点を修正", attachmentUrl: "", comment: "", priority: "低", status: "未着手", ownerId: "USR-005", desiredDueDate: "2026-06-20" },
+    { id: "REQ-105", documentId: "DOC-021", reason: "検証シナリオ更新", content: "推奨設定を更新", attachmentUrl: "", comment: "", priority: "高", status: "対応中", ownerId: "USR-005", desiredDueDate: "2026-06-28" },
+    { id: "REQ-104", documentId: "DOC-019", reason: "FAQ更新", content: "iOS最新版の既知問題を追加", attachmentUrl: "", comment: "", priority: "低", status: "未着手", ownerId: "USR-001", desiredDueDate: "2026-08-23" }
   ],
   activityLogs: [
-    { documentId: "DOC-024", time: "2026/06/18 14:18", actor: "田中 美咲", action: "ステータス変更", beforeValue: "対応中", afterValue: "レビュー待ち", comment: "レビューをお願いします" },
+    { documentId: "DOC-024", time: "2026/06/18 14:18", actor: "田中 美咲", action: "ステータス変更", beforeValue: "未着手", afterValue: "対応中", comment: "対応を開始しました" },
     { documentId: "DOC-024", time: "2026/06/16 09:12", actor: "加藤 翔太", action: "更新依頼作成", beforeValue: "—", afterValue: "REQ-108を作成", comment: "新機能追加に伴う更新" },
     { documentId: "DOC-023", time: "2026/06/17 09:30", actor: "山本 拓也", action: "ドキュメント更新", beforeValue: "旧画面", afterValue: "最新画面", comment: "セットアップ画面の画像を更新" },
     { documentId: "DOC-023", time: "2026/06/16 15:20", actor: "加藤 翔太", action: "担当者変更", beforeValue: "未割当", afterValue: "山本 拓也", comment: "" },
     { documentId: "DOC-022", time: "2026/06/17 11:05", actor: "高橋 直子", action: "コメント追加", beforeValue: "—", afterValue: "レビューコメント追加", comment: "ライセンス体系を再確認してください" },
-    { documentId: "DOC-022", time: "2026/06/17 10:55", actor: "高橋 直子", action: "ステータス変更", beforeValue: "レビュー待ち", afterValue: "差し戻し", comment: "" },
+    { documentId: "DOC-022", time: "2026/06/17 10:55", actor: "高橋 直子", action: "ステータス変更", beforeValue: "対応中", afterValue: "未着手", comment: "" },
     { documentId: "DOC-021", time: "2026/06/14 16:00", actor: "山本 拓也", action: "ドキュメント更新", beforeValue: "旧推奨設定", afterValue: "新推奨設定", comment: "推奨設定の章を更新" },
-    { documentId: "DOC-020", time: "2026/06/20 16:42", actor: "加藤 翔太", action: "完了", beforeValue: "レビュー待ち", afterValue: "完了", comment: "正式版へ反映しました" },
+    { documentId: "DOC-020", time: "2026/06/20 16:42", actor: "加藤 翔太", action: "完了", beforeValue: "対応中", afterValue: "完了", comment: "正式版へ反映しました" },
     { documentId: "DOC-019", time: "2026/06/10 10:20", actor: "佐藤 健", action: "更新依頼作成", beforeValue: "—", afterValue: "REQ-104を作成", comment: "iOS最新版の既知問題追加を依頼" }
   ]
 };
@@ -166,6 +164,13 @@ function documentManagementRoles(doc) {
   return ruleByCategory(doc.category)?.roles.join("、") || "未設定";
 }
 
+function isOverdue(doc) {
+  if (!doc?.desiredDueDate || doc.status === "完了") return false;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(`${doc.desiredDueDate}T00:00:00`) < today;
+}
+
 function applyMasterRules() {
   state.documents.forEach((doc) => {
     doc.priority = calculatePriority(doc);
@@ -189,21 +194,23 @@ function requestRows(requests) {
       <div><button class="document-link request-title" data-document-id="${request.documentId}">${escapeHtml(doc?.name)}</button>
       <div class="request-meta"><span>${request.id}</span><span>${escapeHtml(request.content)}</span></div></div>
       <div class="request-side">${statusBadge(request.status)}${avatar(request.ownerId)}
-      <span class="deadline ${request.overdue ? "overdue" : ""}">${request.overdue ? "⚠ " : ""}${escapeHtml(owner?.name || "未割当")} · ${formatDisplayDate(request.desiredDueDate)}</span></div></article>`;
+      <span class="deadline ${isOverdue(doc) ? "overdue" : ""}">${isOverdue(doc) ? "⚠ " : ""}${escapeHtml(owner?.name || "未割当")} · ${formatDisplayDate(request.desiredDueDate)}</span></div></article>`;
   }).join("");
 }
 
 function renderDashboard() {
   const count = (status) => state.documents.filter((doc) => doc.status === status).length;
-  const overdue = state.requests.filter((request) => request.overdue).length;
-  const chartStatuses = ["未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留"];
-  const maxStatusCount = Math.max(1, ...chartStatuses.map(count));
-  const chartColors = ["#8a958f", "#3976a8", "#d0872d", "#bd5750", "#2d8b62", "#756493"];
+  const overdue = state.documents.filter(isOverdue).length;
+  const chartStatuses = ["未着手", "対応中", "完了", "保留"];
+  const maxStatusCount = Math.max(1, overdue, ...chartStatuses.map(count));
+  const chartColors = ["#8a958f", "#3976a8", "#2d8b62", "#756493"];
   app.innerHTML = `<section class="page">${pageHeader("OVERVIEW", "おはようございます、加藤さん", "カードを選択すると対象ドキュメントへ移動します。")}
     <div class="metrics">
       ${metricCard("総ドキュメント", state.documents.length, "すべて表示", "▤", "")}
+      ${metricCard("未着手", count("未着手"), "対応待ち", "○", "not_started", "#727c77", "#eff1f0")}
       ${metricCard("対応中", count("対応中"), "作業中の資料", "↗", "in_progress", "#346a9c", "#e9f1f8")}
-      ${metricCard("レビュー待ち", count("レビュー待ち"), "確認が必要", "◎", "review_requested", "#b96c16", "#fff3df")}
+      ${metricCard("完了", count("完了"), "反映済み", "✓", "completed", "#2d8b62", "#e8f3ed")}
+      ${metricCard("保留", count("保留"), "対応見送り", "—", "on_hold", "#756493", "#eeeaf5")}
       ${metricCard("期限超過", overdue, "要対応", "!", "overdue", "#bd4242", "#fcebea")}
     </div>
     <div class="dashboard-grid"><section class="panel"><div class="panel-header"><h2>優先度の高い更新依頼</h2><button class="text-button" data-navigate="requests">すべて見る →</button></div>
@@ -212,7 +219,9 @@ function renderDashboard() {
         <div class="status-chart-list">${chartStatuses.map((status, index) => `<button class="status-chart-button" data-dashboard-filter="${STATUS_QUERY[status]}">
           <span class="status-chart-label"><span>${status}</span><strong>${count(status)}</strong></span>
           <span class="status-chart-track"><span class="status-chart-bar" style="width:${count(status) / maxStatusCount * 100}%;--bar:${chartColors[index]}"></span></span>
-        </button>`).join("")}</div></section>
+        </button>`).join("")}
+        <button class="status-chart-button" data-dashboard-filter="overdue"><span class="status-chart-label"><span>期限超過</span><strong>${overdue}</strong></span>
+          <span class="status-chart-track"><span class="status-chart-bar" style="width:${overdue / maxStatusCount * 100}%;--bar:#bd4242"></span></span></button></div></section>
         <section class="panel activity-panel"><div class="panel-header"><h2>最近のアクティビティ</h2><button class="text-button" data-navigate="history">履歴 →</button></div>
         <div class="activity-list">${state.activityLogs.slice(0, 3).map((item) => `<div class="activity-item"><span class="activity-symbol">↺</span><div><p><strong>${escapeHtml(item.actor)}</strong>：${escapeHtml(item.action)}</p><time>${item.time}</time></div></div>`).join("")}</div></section></div>
     </div></section>`;
@@ -224,7 +233,7 @@ function filteredDocuments() {
     const module = moduleById(doc.moduleId)?.name || "";
     const owner = memberById(doc.ownerId)?.name || "";
     const searchable = [doc.name, doc.category, module, owner, doc.id].some((value) => value.toLowerCase().includes(query));
-    const statusMatch = state.statusFilter === "すべて" || doc.status === state.statusFilter || (state.statusFilter === "期限超過" && state.requests.some((request) => request.documentId === doc.id && request.overdue));
+    const statusMatch = state.statusFilter === "すべて" || doc.status === state.statusFilter || (state.statusFilter === "期限超過" && isOverdue(doc));
     return searchable && statusMatch && (state.moduleFilter === "すべて" || doc.moduleId === state.moduleFilter) && matchesUpdatedFilter(doc);
   });
 }
@@ -245,7 +254,7 @@ function renderDocuments() {
   const actions = `<button class="secondary-button compact-button" id="importDocuments">↑ CSVインポート</button><button class="secondary-button compact-button" id="exportDocuments">↓ CSVエクスポート</button>`;
   app.innerHTML = `<section class="page">${pageHeader("DOCUMENTS", "ドキュメント台帳", "資料名を選択すると右側に詳細と履歴を表示します。", actions)}
     <div class="toolbar"><input class="filter-input" id="documentSearch" type="search" placeholder="資料名、担当者で検索..." value="${escapeHtml(state.search)}">
-      <select class="filter-select" id="statusFilter">${["すべて", "未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留", "期限超過"].map((item) => `<option ${state.statusFilter === item ? "selected" : ""}>${item}</option>`).join("")}</select>
+      <select class="filter-select" id="statusFilter">${["すべて", "未着手", "対応中", "完了", "保留", "期限超過"].map((item) => `<option ${state.statusFilter === item ? "selected" : ""}>${item}</option>`).join("")}</select>
       <select class="filter-select" id="moduleFilter"><option>すべて</option>${state.modules.map((module) => `<option value="${module.id}" ${state.moduleFilter === module.id ? "selected" : ""}>${escapeHtml(module.name)}</option>`).join("")}</select>
       <select class="filter-select" id="updatedFilter"><option value="すべて">最終更新日：すべて</option><option value="1m" ${state.updatedFilter === "1m" ? "selected" : ""}>1ヶ月以内</option><option value="3m" ${state.updatedFilter === "3m" ? "selected" : ""}>3ヶ月以内</option><option value="6m" ${state.updatedFilter === "6m" ? "selected" : ""}>6ヶ月以内</option><option value="1y_stale" ${state.updatedFilter === "1y_stale" ? "selected" : ""}>1年以上更新なし</option></select>
     </div>
@@ -291,8 +300,8 @@ function renderMembers() {
 
 function renderModules() {
   app.innerHTML = `<section class="page">${pageHeader("MODULE MASTER", "モジュール管理", "重要モジュールは優先度の自動計算に利用されます。", '<button class="primary-button compact-button" id="addModule">＋ モジュール追加</button>')}
-    <section class="panel table-panel"><table class="data-table"><thead><tr><th>モジュール</th><th>説明</th><th>重要モジュール</th><th>状態</th><th></th></tr></thead>
-    <tbody>${state.modules.map((module) => `<tr><td class="doc-cell"><strong>${escapeHtml(module.name)}</strong><span>${module.id}</span></td><td>${escapeHtml(module.description || "—")}</td>
+    <section class="panel table-panel"><table class="data-table"><thead><tr><th>モジュール</th><th>重要モジュール</th><th>状態</th><th></th></tr></thead>
+    <tbody>${state.modules.map((module) => `<tr><td class="doc-cell"><strong>${escapeHtml(module.name)}</strong><span>${module.id}</span></td>
       <td><span class="important-badge ${module.isImportant ? "important" : ""}">${module.isImportant ? "重要" : "通常"}</span></td>
       <td><button class="toggle-button ${module.isActive ? "on" : ""}" data-toggle-module="${module.id}"><span></span>${module.isActive ? "有効" : "無効"}</button></td>
       <td><div class="row-actions"><button class="text-button" data-edit-module="${module.id}">編集</button><button class="danger-button" data-delete-module="${module.id}">削除</button></div></td></tr>`).join("")}</tbody></table></section></section>`;
@@ -372,22 +381,24 @@ function navigate(page, query = "") {
 
 function openFilteredDocuments(filter) {
   state.statusFilter = filter === "overdue" ? "期限超過" : (QUERY_STATUS[filter] || "すべて");
-  navigate("documents", filter ? `?status=${encodeURIComponent(filter)}` : "");
+  navigate("documents", filter === "overdue" ? "?filter=overdue" : (filter ? `?status=${encodeURIComponent(filter)}` : ""));
 }
 
 function applyUrl() {
   const path = location.pathname.split("/").filter(Boolean)[0] || "dashboard";
   state.page = ["documents", "requests", "history", "members", "modules", "rules", "settings"].includes(path) ? path : "dashboard";
-  const status = new URLSearchParams(location.search).get("status");
-  state.statusFilter = status === "overdue" ? "期限超過" : (QUERY_STATUS[status] || "すべて");
+  const params = new URLSearchParams(location.search);
+  const status = params.get("status");
+  state.statusFilter = params.get("filter") === "overdue" ? "期限超過" : (QUERY_STATUS[status] || "すべて");
 }
 
 function bindDocumentFilters() {
   $("#documentSearch").addEventListener("input", (event) => { state.search = event.target.value; renderDocuments(); bindCommon(); });
   $("#statusFilter").addEventListener("change", (event) => {
     state.statusFilter = event.target.value;
-    const slug = event.target.value === "期限超過" ? "overdue" : STATUS_QUERY[event.target.value];
-    history.replaceState({}, "", `/documents${slug ? `?status=${slug}` : ""}`);
+    const slug = STATUS_QUERY[event.target.value];
+    const query = event.target.value === "期限超過" ? "?filter=overdue" : (slug ? `?status=${slug}` : "");
+    history.replaceState({}, "", `/documents${query}`);
     renderDocuments(); bindCommon();
   });
   $("#moduleFilter").addEventListener("change", (event) => { state.moduleFilter = event.target.value; renderDocuments(); bindCommon(); });
@@ -411,7 +422,7 @@ function openDetailPanel(documentId) {
     </dl></section>
     <section class="detail-section"><h3>ステータス・更新希望期限を変更</h3>
       <form class="detail-edit-form" id="detailUpdateForm">
-        <div class="form-grid"><label>ステータス<select id="detailStatus">${["未着手", "対応中", "レビュー待ち", "差し戻し", "完了", "保留"].map((status) => `<option ${doc.status === status ? "selected" : ""}>${status}</option>`).join("")}</select></label>
+        <div class="form-grid"><label>ステータス<select id="detailStatus">${["未着手", "対応中", "完了", "保留"].map((status) => `<option ${doc.status === status ? "selected" : ""}>${status}</option>`).join("")}</select></label>
         <label>更新希望期限<input id="detailDueDate" type="date" value="${escapeHtml(doc.desiredDueDate || "")}"></label></div>
         <label>コメント（任意）<textarea id="detailChangeComment" rows="3" placeholder="変更理由や補足を入力してください"></textarea></label>
         <div class="modal-actions"><button class="primary-button compact-button" type="submit">変更を保存</button></div>
@@ -550,7 +561,6 @@ function openModuleModal(id = "") {
   $("#moduleModalTitle").textContent = module ? "モジュールを編集" : "モジュールを追加";
   $("#moduleEditId").value = module?.id || "";
   $("#moduleName").value = module?.name || "";
-  $("#moduleDescription").value = module?.description || "";
   $("#moduleActive").checked = module?.isActive ?? true;
   $("#moduleImportant").checked = module?.isImportant ?? false;
   moduleModal.classList.remove("hidden");
@@ -727,7 +737,7 @@ $("#moduleForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const id = $("#moduleEditId").value; const existing = moduleById(id); const name = $("#moduleName").value.trim();
   if (state.modules.some((module) => module.name === name && module.id !== id)) return showToast("同名のモジュールがあります", true);
-  const data = { name, description: $("#moduleDescription").value.trim(), isActive: $("#moduleActive").checked, isImportant: $("#moduleImportant").checked, updatedAt: formatDisplayDate(formatDate(new Date())) };
+  const data = { name, isActive: $("#moduleActive").checked, isImportant: $("#moduleImportant").checked, updatedAt: formatDisplayDate(formatDate(new Date())) };
   if (existing) Object.assign(existing, data); else state.modules.push({ id: nextId("MOD", state.modules), ...data, createdAt: formatDisplayDate(formatDate(new Date())) });
   applyMasterRules();
   closeModal(moduleModal, $("#moduleForm")); renderModules(); showToast(existing ? "モジュールを更新しました" : "モジュールを追加しました");
@@ -751,7 +761,7 @@ $("#requestForm").addEventListener("submit", (event) => {
   const priority = calculatePriority(doc); const assignee = autoAssign(doc);
   if (!assignee) return showToast("管理ロールとモジュールに一致する有効ユーザーがいません", true);
   const dueDate = $("#requestDeadline").value || calculateDueDate(priority);
-  const request = { id: nextId("REQ", state.requests), documentId: doc.id, reason: $("#requestReason").value.trim(), content: $("#requestContent").value.trim(), attachmentUrl: $("#requestAttachmentUrl").value.trim(), comment: $("#requestComment").value.trim(), priority, status: "未着手", ownerId: assignee.id, desiredDueDate: dueDate, overdue: false };
+  const request = { id: nextId("REQ", state.requests), documentId: doc.id, reason: $("#requestReason").value.trim(), content: $("#requestContent").value.trim(), attachmentUrl: $("#requestAttachmentUrl").value.trim(), comment: $("#requestComment").value.trim(), priority, status: "未着手", ownerId: assignee.id, desiredDueDate: dueDate };
   state.requests.unshift(request);
   Object.assign(doc, { ownerId: assignee.id, priority, status: "未着手", desiredDueDate: dueDate, updated: formatDateTime(new Date()), updatedBy: "加藤 翔太" });
   addActivityLog(doc.id, "更新依頼作成", "—", `${request.content}／優先度${priority}／担当者${assignee.name}`, request.comment);

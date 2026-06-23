@@ -157,8 +157,6 @@ h3 { font-size: 15px; }
 .status-badge::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
 .status-未着手 { color: #6d7772; background: #eff1f0; }
 .status-対応中 { color: var(--blue); background: var(--blue-soft); }
-.status-レビュー待ち { color: var(--amber); background: var(--amber-soft); }
-.status-差し戻し { color: var(--red); background: var(--red-soft); }
 .status-完了 { color: var(--green); background: var(--green-soft); }
 .status-保留 { color: #6c5c8b; background: #eeeaf5; }
 
