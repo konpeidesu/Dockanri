@@ -530,7 +530,6 @@ function openDetailPanel(documentId) {
       </form>
     </section>
     <section class="detail-section"><div class="section-title-row"><h3>更新タイムライン</h3><span>${logs.length}件</span></div>
-      <div class="timeline-direction"><span>古い</span><span class="timeline-arrow">↓</span><span>下へ行くほど新しい</span></div>
       <div class="mini-timeline">${logs.length ? logs.map((log, index) => {
         const isLatest = index === logs.length - 1;
         return `<article class="mini-timeline-item${isLatest ? " is-latest" : ""}"><span class="mini-timeline-dot"></span><div>
