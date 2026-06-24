@@ -510,7 +510,7 @@ function openDetailPanel(documentId) {
   const doc = documentById(documentId);
   if (!doc) return showToast("対象ドキュメントが見つかりません", true);
   state.selectedDocumentId = documentId;
-  const logs = state.activityLogs.filter((log) => log.documentId === documentId).sort((a, b) => b.time.localeCompare(a.time));
+  const logs = state.activityLogs.filter((log) => log.documentId === documentId).sort((a, b) => a.time.localeCompare(b.time));
   detailPanel.innerHTML = `<div class="detail-panel-header"><div><p class="eyebrow">${doc.id}</p><h2>${escapeHtml(doc.name)}</h2></div><button class="detail-close" id="closeDetailPanel">×</button></div>
     <div class="detail-panel-body"><div class="detail-badges">${statusBadge(doc.status)}${priorityBadge(doc.priority)}</div>
     <section class="detail-section"><h3>ドキュメント情報</h3><dl class="detail-list">
@@ -530,11 +530,16 @@ function openDetailPanel(documentId) {
       </form>
     </section>
     <section class="detail-section"><div class="section-title-row"><h3>更新タイムライン</h3><span>${logs.length}件</span></div>
-      <div class="mini-timeline">${logs.length ? logs.map((log) => `<article class="mini-timeline-item"><span class="mini-timeline-dot"></span><div>
+      <div class="timeline-direction"><span>古い</span><span class="timeline-arrow">↓</span><span>下へ行くほど新しい</span></div>
+      <div class="mini-timeline">${logs.length ? logs.map((log, index) => {
+        const isLatest = index === logs.length - 1;
+        return `<article class="mini-timeline-item${isLatest ? " is-latest" : ""}"><span class="mini-timeline-dot"></span><div>
         <div class="timeline-heading"><strong>${escapeHtml(log.action)}</strong><time>${log.time}</time></div>
         ${log.afterValue ? `<p class="timeline-result">${escapeHtml(log.afterValue)}</p>` : `<p>${escapeHtml(log.changeSummary || "—")}</p>`}
         ${log.comment ? `<p class="timeline-comment">コメント：${escapeHtml(log.comment)}</p>` : ""}
-      </div></article>`).join("") : '<p class="empty-timeline">履歴はまだありません。</p>'}</div></section></div>`;
+        ${isLatest ? '<span class="latest-badge">最新</span>' : ""}
+      </div></article>`;
+      }).join("") : '<p class="empty-timeline">履歴はまだありません。</p>'}</div></section></div>`;
   detailPanel.classList.add("open");
   detailBackdrop.classList.remove("hidden");
   document.body.classList.add("detail-open");

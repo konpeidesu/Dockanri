@@ -316,16 +316,21 @@ form input:focus, form select:focus, form textarea:focus { border-color: #74ac91
 .detail-list a { color: var(--green); font-weight: 600; }
 .section-title-row { display: flex; align-items: center; justify-content: space-between; }
 .section-title-row span { color: var(--muted); font-size: 10px; }
+.timeline-direction { display: inline-flex; align-items: center; gap: 7px; margin: 8px 0 12px; padding: 6px 10px; border-radius: 999px; color: #4b725f; background: #eff7f2; font-size: 10px; font-weight: 700; }
+.timeline-arrow { color: var(--green); font-size: 13px; line-height: 1; }
 .mini-timeline { position: relative; }
-.mini-timeline::before { content: ""; position: absolute; top: 6px; bottom: 8px; left: 5px; width: 1px; background: #dbe5df; }
+.mini-timeline::before { content: ""; position: absolute; top: 6px; bottom: 8px; left: 5px; width: 1px; background: linear-gradient(#dbe5df 0%, #dbe5df 82%, var(--green) 100%); }
 .mini-timeline-item { position: relative; display: grid; grid-template-columns: 12px 1fr; gap: 11px; padding-bottom: 20px; }
 .mini-timeline-dot { width: 11px; height: 11px; z-index: 1; margin-top: 3px; border: 3px solid #d7ece1; border-radius: 50%; background: var(--green); }
+.mini-timeline-item.is-latest { margin: 0 -6px; padding: 12px 6px 14px; border-radius: 12px; background: #f2fbf6; }
+.mini-timeline-item.is-latest .mini-timeline-dot { width: 13px; height: 13px; border-color: #b9e4ce; box-shadow: 0 0 0 5px rgba(46, 125, 89, .12); }
 .timeline-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 5px; }
 .timeline-heading strong { font-size: 11px; }
 .timeline-heading time { color: var(--muted); font-size: 8px; white-space: nowrap; }
 .mini-timeline-item p { margin: 0 0 5px; color: #546159; font-size: 10px; line-height: 1.7; }
 .mini-timeline-item .timeline-comment { padding: 7px 9px; border-radius: 6px; color: #526159; background: #f4f7f5; }
-.mini-timeline-item > div > span { color: #89948e; font-size: 8px; }
+.latest-badge { display: inline-flex; align-items: center; margin-top: 3px; padding: 3px 7px; border-radius: 999px; color: #fff; background: var(--green); font-size: 9px; font-weight: 700; }
+.mini-timeline-item > div > span:not(.latest-badge) { color: #89948e; font-size: 8px; }
 .empty-timeline { color: var(--muted); font-size: 11px; }
 .detail-backdrop { position: fixed; inset: 0; z-index: 44; display: block; background: transparent; }
 
